@@ -1,0 +1,17 @@
+{
+  "name": "WingMWeb",
+  "authors": [
+    "Wing Gao <wing.gao@live.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

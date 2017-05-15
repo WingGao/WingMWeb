@@ -1,0 +1,9 @@
+@import "../Vars";
+
+html {
+    text-size-adjust: 100%;
+}
+
+body, .pure-g [class*=pure-u] {
+    font-family: $font-cn;
+}

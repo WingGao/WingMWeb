@@ -1,3 +1,4 @@
+var path = require('path');
 var PROJ_PATH = path.join(__dirname, '../WebContent');
 
 function taskMain() {
@@ -19,8 +20,10 @@ var config = {
     browserSyncType: 'default',// default | proxy | docker
     browserSyncPort: 3000,
     browserSyncProxy: "127.0.0.1:7005",
+    browserSyncBaseDir: "",//default proj_path
     taskReloadGlob: '',
 };
 config.taskReloadGlob = config.proj_path + "/**/*.html";
+config.browserSyncBaseDir = config.proj_path;
 
 module.exports = config;

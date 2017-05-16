@@ -193,6 +193,9 @@ gulp.task('browser-sync', function () {
         case 'default':
             browserSync.init({
                 online: true,
+                server: {
+                    baseDir: conf.browserSyncBaseDir,
+                },
                 port: conf.browserSyncPort,
             });
             break;

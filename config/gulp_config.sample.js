@@ -22,6 +22,17 @@ var config = {
     browserSyncProxy: "127.0.0.1:7005",
     browserSyncBaseDir: "",//default proj_path
     taskReloadGlob: '',
+    // for server-dev.js
+    proxyPort: 7012,
+    /*
+     * {from: '/api/captcha*', to: '/captcha', host: '120.92.16.213'},
+     * file: 'dist/index.html'   指定文件,
+     * dir: 'XXX'  指定文件
+     * */
+    proxyList: [
+        {from: '*'}
+    ],
+    proxyTargetHost: '127.0.0.1:7003',
 };
 config.taskReloadGlob = config.proj_path + "/**/*.html";
 config.browserSyncBaseDir = config.proj_path;

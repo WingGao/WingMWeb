@@ -1,5 +1,5 @@
 var path = require('path');
-var PROJ_PATH = path.join(__dirname, '../WebContent');
+var PROJ_PATH = path.join(__dirname, '../../');
 
 function taskMain() {
     gulp.task('dev-watch', [
@@ -16,12 +16,17 @@ function taskMain() {
 
 var config = {
     proj_path: '',
-    devTasks: ['browser-sync'],
-    browserSyncType: 'default',// default | proxy | docker
+    devTasks: ['js', 'browser-sync'],// browser-sync | js
+    browserSyncType: 'proxy',// default | proxy | docker
     browserSyncPort: 3000,
-    browserSyncProxy: "127.0.0.1:7005",
+    browserSyncProxy: "127.0.0.1:7010",
     browserSyncBaseDir: "",//default proj_path
     taskReloadGlob: '',
+    // for js task
+    taskJSGlob: path.join(PROJ_PATH, 'src-js/**/*.js'),
+    taskJSCombineName: '', //合并的文件，空则不合并  xxx.js | '' | null
+    taskJSMapPath: path.join(PROJ_PATH, 'WebContent/resources/tmp'),// dir | '' | null
+    taskJSOutPath: path.join(PROJ_PATH, 'WebContent/resources/js'),
     // for server-dev.js
     proxyPort: 7012,
     /*
@@ -30,9 +35,11 @@ var config = {
      * dir: 'XXX'  指定文件
      * */
     proxyList: [
+        {from: '/mainS', dir: path.join(PROJ_PATH, 'mainS')},
+        {from: '/resources', dir: path.join(PROJ_PATH, 'resources')},
         {from: '*'}
     ],
-    proxyTargetHost: '127.0.0.1:7003',
+    proxyTargetHost: '127.0.0.1:7010',
 };
 config.taskReloadGlob = config.proj_path + "/**/*.html";
 config.browserSyncBaseDir = config.proj_path;

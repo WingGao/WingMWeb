@@ -94,31 +94,34 @@ gulp.task('version', function () {
 
 
 gulp.task('js', function () {
-    return gulp.src(JS_FILES)
-        .pipe(babel({
-            presets: ['babel-preset-es2015'].map(require.resolve)
-        }).on('error', console.error.bind(console)))
-        .pipe(gulp.dest(JS_DIST_PATH));
+    console.log('taskJSGlob:', conf.taskJSGlob)
+    return jsCombine(false);
 });
 
 
 function jsCombine(ugly) {
-    var g = gulp.src(JS_FILES)
+    var needMap = _.size(conf.taskJSMapPath) > 0;
+    var g = gulp.src(conf.taskJSGlob);
     // .pipe(order([
     //     JS_PATH + '/03_*',
     //     JS_PATH + '/utils.js',
     //     JS_PATH + '/*.js',
     // ]))
-    // .pipe(sourcemaps.init())
-        .pipe(babel({
-            presets: ['babel-preset-es2015'].map(require.resolve)
-        }).on('error', console.error.bind(console)))
-    // .pipe(concat('suamo.js'))
+    if (needMap) {
+        g = g.pipe(sourcemaps.init())
+    }
+    g = g.pipe(babel({
+        presets: ['babel-preset-es2015'].map(require.resolve)
+    }).on('error', console.error.bind(console)));
+
+    if (_.size(conf.taskJSCombineName) > 0) g = g.pipe(concat(conf.taskJSCombineName));
+
     if (ugly) {
         g = g.pipe(uglify())
     }
-    // g.pipe(sourcemaps.write('../../tmp'))
-    g = g.pipe(gulp.dest(JS_DIST_PATH));
+    if (needMap) g = g.pipe(sourcemaps.write(conf.taskJSMapPath));
+
+    g = g.pipe(gulp.dest(conf.taskJSOutPath));
     return g;
 }
 
@@ -216,9 +219,12 @@ gulp.task('dev-watch', conf.devTasks, function () {
     IS_DEV = true;
     conf.devTasks.forEach(function (task) {
         switch (task) {
+            case 'js':
+                gulp.watch(conf.taskJSGlob, ['js-watch']);
+                break;
         }
     })
-    // gulp.watch(JS_FILES, ['js-watch']);
+
     // gulp.watch(SASS_FILES, ['sass']);
     // gulp.watch("../src/wp-content/**/*.php", ['browsersync-reload']);
     gulp.watch(conf.taskReloadGlob, ['browsersync-reload']);

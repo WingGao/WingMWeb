@@ -17,6 +17,8 @@ var http = require('http');
 var path = require('path');
 var conf = require('./config/gulp_config');
 
+//read https://www.browsersync.io/docs/gulp
+
 var AUTOPREFIXER_BROWSERS = [
     'last 3 versions',
     'ie >= 8',
@@ -27,9 +29,6 @@ var AUTOPREFIXER_BROWSERS = [
 //配置当前项目
 var IS_DEV = false;
 var PROJ_PATH = conf.proj_path;
-var JS_PATH = '../js-src';
-var JS_DIST_PATH = PROJ_PATH + '/resources/js';
-var JS_FILES = JS_PATH + '/**/*.js';
 var SASS_PATH = '../css-src';
 var SASS_DIST_PATH = PROJ_PATH + '/resources/css';
 var SASS_FILES = SASS_PATH + '/*.scss';
@@ -120,7 +119,7 @@ function jsCombine(ugly) {
     if (ugly) {
         g = g.pipe(uglify())
     }
-    if (needMap) g = g.pipe(sourcemaps.write(conf.taskJSMapPath));
+    if (needMap) g = g.pipe(sourcemaps.write(conf.taskJSMapPath, {sourceRoot: '/src-js'}));
 
     g = g.pipe(gulp.dest(conf.taskJSOutPath));
     return g;

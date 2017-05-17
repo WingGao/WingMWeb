@@ -94,7 +94,8 @@ gulp.task('version', function () {
 
 
 gulp.task('js', function () {
-    console.log('taskJSGlob:', conf.taskJSGlob)
+    console.log('taskJSGlob:', conf.taskJSGlob);
+    console.log('taskJSOut:', conf.taskJSOutPath);
     return jsCombine(false);
 });
 
@@ -126,7 +127,7 @@ function jsCombine(ugly) {
 }
 
 gulp.task('js-comb-test', [], function () {
-    jsCombine(false);
+    return jsCombine(false);
 });
 
 gulp.task('js-comb', [], function () {
@@ -227,7 +228,11 @@ gulp.task('dev-watch', conf.devTasks, function () {
 
     // gulp.watch(SASS_FILES, ['sass']);
     // gulp.watch("../src/wp-content/**/*.php", ['browsersync-reload']);
-    gulp.watch(conf.taskReloadGlob, ['browsersync-reload']);
+    if (_.size(conf.taskReloadGlob) > 0) {
+        console.log('taskReloadGlob:', conf.taskReloadGlob);
+        gulp.watch(conf.taskReloadGlob, ['browsersync-reload']);
+    }
+
 });
 
 gulp.task('default', ['dev-watch']);

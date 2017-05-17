@@ -18,15 +18,15 @@ var config = {
     proj_path: '',
     devTasks: ['js', 'browser-sync'],// browser-sync | js
     browserSyncType: 'proxy',// default | proxy | docker
-    browserSyncPort: 3000,
-    browserSyncProxy: "127.0.0.1:7010",
+    browserSyncPort: 7013,
+    browserSyncProxy: "127.0.0.1:7012",
     browserSyncBaseDir: "",//default proj_path
-    taskReloadGlob: '',
+    taskReloadGlob: path.join(PROJ_PATH, 'WebContent', '**/*.html'),
     // for js task
     taskJSGlob: path.join(PROJ_PATH, 'src-js/**/*.js'),
     taskJSCombineName: '', //合并的文件，空则不合并  xxx.js | '' | null
-    taskJSMapPath: path.join(PROJ_PATH, 'WebContent/resources/tmp'),// dir | '' | null
     taskJSOutPath: path.join(PROJ_PATH, 'WebContent/resources/js'),
+    taskJSMapPath: '../tmp',// dir | '' | null,  相对路径taskJSOutPath
     // for server-dev.js
     proxyPort: 7012,
     /*
@@ -35,13 +35,12 @@ var config = {
      * dir: 'XXX'  指定文件
      * */
     proxyList: [
-        {from: '/mainS', dir: path.join(PROJ_PATH, 'mainS')},
-        {from: '/resources', dir: path.join(PROJ_PATH, 'resources')},
+        {from: '/mainS', dir: path.join(PROJ_PATH, 'WebContent', 'mainS')},
+        {from: '/resources', dir: path.join(PROJ_PATH, 'WebContent', 'resources')},
         {from: '*'}
     ],
     proxyTargetHost: '127.0.0.1:7010',
 };
-config.taskReloadGlob = config.proj_path + "/**/*.html";
 config.browserSyncBaseDir = config.proj_path;
 
 module.exports = config;

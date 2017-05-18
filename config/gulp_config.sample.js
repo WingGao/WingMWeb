@@ -17,7 +17,7 @@ function taskMain() {
 
 var config = {
     proj_path: '',
-    devTasks: ['js', 'browser-sync'],// browser-sync | js
+    devTasks: ['js', 'browser-sync'],// browser-sync | js | sass
     browserSyncType: 'proxy',// default | proxy | docker
     browserSyncPort: 7013,
     browserSyncProxy: "127.0.0.1:7012",
@@ -28,6 +28,11 @@ var config = {
     taskJSCombineName: '', //合并的文件，空则不合并  xxx.js | '' | null
     taskJSOutPath: path.join(PROJ_PATH, 'WebContent/resources/js'),
     taskJSMapPath: '../tmp',// dir | '' | null,  相对路径taskJSOutPath
+    // for sass task
+    taskSASSGlob: path.join(PROJ_PATH, 'src-scss/**/*.scss'),
+    taskSASSCombineName: '', //合并的文件，空则不合并  xxx.css | '' | null
+    taskSASSOutPath: path.join(PROJ_PATH, 'WebContent/resources/css'),
+    taskSASSMapPath: '../tmp',// dir | '' | null,  相对路径taskSASSOutPath
     // for server-dev.js
     proxyPort: 7012,
     /*

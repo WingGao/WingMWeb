@@ -141,7 +141,8 @@ gulp.task('js-comb', [], function () {
 });
 
 function sassCombine(ugly) {
-    var g = gulp.src(SASS_FILES)
+    var needMap = _.size(conf.taskSASSMapPath) > 0;
+    var g = gulp.src(conf.taskSASSGlob);
     // .pipe(order([
     //     SASS_PATH + '/01_pure.scss',
     //     SASS_PATH + '/02_style.scss',
@@ -150,21 +151,25 @@ function sassCombine(ugly) {
     //     SASS_PATH + '/*.scss',
     //     SASS_PATH + '/screen.scss',
     // ]))
-        .pipe(sourcemaps.init())
-        .pipe(sass().on('error', sass.logError))
-        .pipe(sourcemaps.write({includeContent: false}))
-        .pipe(sourcemaps.init({loadMaps: true}))
-        .pipe(autoprefixer(AUTOPREFIXER_BROWSERS))
+    if (needMap) {
+        g = g.pipe(sourcemaps.init())
+    }
+    g = g.pipe(sass().on('error', sass.logError));
+    if (needMap) {
+        g = g.pipe(sourcemaps.write({includeContent: false}))
+            .pipe(sourcemaps.init({loadMaps: true}))
+    }
+
+    g = g.pipe(autoprefixer(AUTOPREFIXER_BROWSERS))
     if (ugly) {
         g = g.pipe(minifyCSS())
     }
-    if (!IS_DEV) {
-        // g.pipe(addsrc.prepend(SASS_PATH + '/00_theme.css'))
+
+    if (_.size(conf.taskSASSCombineName) > 0) g = g.pipe(concat(conf.taskSASSCombineName));
+    if (needMap) {
+        g = g.pipe(sourcemaps.write(conf.taskSASSMapPath))
     }
-    if (SASS_COMBINE_NAME.length > 0) g = g.pipe(concat(SASS_COMBINE_NAME));
-    g
-    // .pipe(sourcemaps.write('./tmp'))
-        .pipe(gulp.dest(SASS_DIST_PATH))
+    g = g.pipe(gulp.dest(conf.taskSASSOutPath))
         .pipe(browserSync.stream());
     return g
 }
@@ -229,11 +234,12 @@ gulp.task('dev-watch', conf.devTasks, function () {
             case 'js':
                 gulp.watch(conf.taskJSGlob, ['js-watch']);
                 break;
+            case 'sass':
+                gulp.watch(conf.taskSASSGlob, ['sass']);
+                break;
         }
     })
 
-    // gulp.watch(SASS_FILES, ['sass']);
-    // gulp.watch("../src/wp-content/**/*.php", ['browsersync-reload']);
     if (_.size(conf.taskReloadGlob) > 0) {
         console.log('taskReloadGlob:', conf.taskReloadGlob);
         gulp.watch(conf.taskReloadGlob, ['browsersync-reload']);

@@ -106,7 +106,7 @@ gulp.task('js', function () {
 });
 
 
-function jsCombine(ugly) {
+function jsCombine(ugly, done) {
     var needMap = _.size(conf.taskJSMapPath) > 0;
     var g = gulp.src(conf.taskJSGlob);
     // .pipe(order([
@@ -119,7 +119,10 @@ function jsCombine(ugly) {
     }
     g = g.pipe(babel({
         presets: ['babel-preset-es2015'].map(require.resolve)
-    }).on('error', console.error.bind(console)));
+    }).on('error', function (e) {
+        console.log('>>> ERROR', e);
+        this.emit('end');
+    }));
 
     if (_.size(conf.taskJSCombineName) > 0) g = g.pipe(concat(conf.taskJSCombineName));
 
@@ -128,12 +131,15 @@ function jsCombine(ugly) {
     }
     if (needMap) g = g.pipe(sourcemaps.write(conf.taskJSMapPath, {sourceRoot: '/src-js'}));
 
-    g = g.pipe(gulp.dest(conf.taskJSOutPath));
+    g = g.pipe(gulp.dest(conf.taskJSOutPath))
+        .on('end', function () {
+            if (done != null) done()
+        });
     return g;
 }
 
-gulp.task('js-comb-test', [], function () {
-    return jsCombine(false);
+gulp.task('js-comb-test', [], function (done) {
+    return jsCombine(false, done);
 });
 
 gulp.task('js-comb', [], function () {

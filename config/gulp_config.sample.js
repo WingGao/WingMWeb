@@ -1,5 +1,6 @@
 var path = require('path');
 var PROJ_PATH = path.join(__dirname, '../../');
+console.log('PROJ_PATH:', PROJ_PATH);
 
 function taskMain() {
     gulp.task('dev-watch', [

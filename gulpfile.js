@@ -15,7 +15,14 @@ var os = require('os');
 var _ = require('lodash');
 var http = require('http');
 var path = require('path');
-var conf = require('./config/gulp_config');
+
+var argv = require('yargs').argv;
+// gulp taskA -c config-file-path
+if (_.size(argv.c) > 0) {
+    var conf = require(argv.c)
+} else {
+    var conf = require('./config/gulp_config');
+}
 
 //read https://www.browsersync.io/docs/gulp
 

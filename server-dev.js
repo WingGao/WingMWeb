@@ -2,7 +2,12 @@ var express = require('express')
 var path = require('path')
 var compression = require('compression')
 var proxy = require('express-http-proxy');
-var conf = require('./config/gulp_config');
+var argv = require('yargs').argv;
+if (argv.c != null) {
+    var conf = require(argv.c)
+} else {
+    var conf = require('./config/gulp_config');
+}
 //npm install express compression express-http-proxy
 //unzip zjf.zip -d zjf
 //DEBUG=express:* node server.js

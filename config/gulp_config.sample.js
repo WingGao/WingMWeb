@@ -1,32 +1,27 @@
 var path = require('path');
-var PROJ_PATH = path.join(__dirname, '../../');
+var webpack = require('./WingMWeb/node_modules/webpack');
+
+var PROJ_PATH = path.join(__dirname, './');
+var MOD_PATH = path.join(__dirname, 'WingMWeb');
+
 console.log('PROJ_PATH:', PROJ_PATH);
 
-function taskMain() {
-    gulp.task('dev-watch', [
-        'js',
-        'sass',
-        'browser-sync'], function () {
-        IS_DEV = true;
-        gulp.watch(JS_FILES, ['js-watch']);
-        gulp.watch(SASS_FILES, ['sass']);
-        // gulp.watch("../src/wp-content/**/*.php", ['browsersync-reload']);
-        gulp.watch(PROJ_PATH + "/**/*.html", ['browsersync-reload']);
-    });
-}
-
 var config = {
-    proj_path: '',
-    devTasks: ['js', 'browser-sync'],// browser-sync | js | sass
+    proj_path: PROJ_PATH,
+    isDebug: true,
+    devTasks: ['browser-sync'],// browser-sync | js | sass
     browserSyncType: 'proxy',// default | proxy | docker
-    browserSyncPort: 7013,
-    browserSyncProxy: "127.0.0.1:7012",
-    browserSyncBaseDir: "",//default proj_path
+    browserSyncPort: 7001,
+    browserSyncProxy: "127.0.0.1:7017",
+    browserSyncBaseDir: path.join(PROJ_PATH, 'WingMWeb', 'html'),//default proj_path
     taskReloadGlob: path.join(PROJ_PATH, 'WebContent', '**/*.html'),
+    // for webpack
+    entry: './WingMWeb/js/comm/react-test.jsx',
+    // entry: './WingMWeb/js/comm/req.js',
     // for js task
     taskJSGlob: path.join(PROJ_PATH, 'src-js/**/*.js'),
-    taskJSCombineName: '', //合并的文件，空则不合并  xxx.js | '' | null
-    taskJSOutPath: path.join(PROJ_PATH, 'WebContent/resources/js'),
+    taskJSCombineName: 'bundle.js', //合并的文件，空则不合并  xxx.js | '' | null
+    taskJSOutPath: path.join(PROJ_PATH, 'dist'),
     taskJSMapPath: '../tmp',// dir | '' | null,  相对路径taskJSOutPath
     // for sass task
     taskSASSGlob: path.join(PROJ_PATH, 'src-scss/**/*.scss'),
@@ -34,19 +29,87 @@ var config = {
     taskSASSOutPath: path.join(PROJ_PATH, 'WebContent/resources/css'),
     taskSASSMapPath: '../tmp',// dir | '' | null,  相对路径taskSASSOutPath
     // for server-dev.js
-    proxyPort: 7012,
+    proxyPort: 7017,
     /*
      * {from: '/api/captcha*', to: '/captcha', host: '120.92.16.213'},
      * file: 'dist/index.html'   指定文件,
      * dir: 'XXX'  指定文件
      * */
     proxyList: [
-        {from: '/mainS', dir: path.join(PROJ_PATH, 'WebContent', 'mainS')},
-        {from: '/resources', dir: path.join(PROJ_PATH, 'WebContent', 'resources')},
-        {from: '*'}
+        {from: '/dist', dir: path.join(PROJ_PATH, 'dist')},
+        {from: '*', file: path.join(MOD_PATH, 'html', 'react-test.html')},
     ],
     proxyTargetHost: '127.0.0.1:7010',
 };
-config.browserSyncBaseDir = config.proj_path;
 
-module.exports = config;
+
+var webpackConf = {
+    context: config.proj_path,
+    target: 'web',
+    entry: config.entry,
+    output: {
+        filename: config.taskJSCombineName,
+        path: config.taskJSOutPath
+    },
+    module: {
+        rules: [
+            {
+                test: /\.(js|jsx)$/,
+                // include: [
+                // path.resolve(MOD_PATH, 'js', 'comm')
+                // ],
+                exclude: [
+                    /node_modules/,
+                    /bower_components/,
+                    // path.resolve(__dirname, "app/demo-files")
+                ],
+
+                enforce: "pre",
+                // enforce: "post",
+                // flags to apply these rules, even if they are overridden (advanced option)
+                use: {
+                    loader: path.join(MOD_PATH, "node_modules", "babel-loader"),
+                    options: {
+                        babelrc: false,
+                        presets: ["env", "react"]
+                    },
+                },
+            },
+        ]
+    },
+    resolve: {
+        // options for resolving module requests
+        // (does not apply to resolving to loaders)
+
+        modules: [
+            "node_modules",
+            PROJ_PATH,
+            path.join(MOD_PATH, "node_modules"),
+        ],
+        // directories where to look for modules
+
+        extensions: [".js", ".json", ".jsx", ".css"],
+        // extensions that are used
+    },
+    // devtool: 'eval-source-map',
+    // devtool: 'cheap-eval-source-map',
+    devtool: 'eval',
+    externals: {
+        react: 'React',
+        'react-dom': 'ReactDOM',
+    },
+    plugins: [
+        // Define free variables
+        // https://webpack.github.io/docs/list-of-plugins.html#defineplugin
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': config.isDebug ? '"development"' : '"production"',
+            'process.env.BROWSER': false,
+            __DEV__: config.isDebug,
+        }),
+    ],
+}
+
+module.exports = {
+    gulp: config,
+    default: webpackConf,
+};

@@ -4,9 +4,9 @@ var compression = require('compression')
 var proxy = require('express-http-proxy');
 var argv = require('yargs').argv;
 if (argv.c != null) {
-    var conf = require(argv.c)
+    var conf = require(argv.c).gulp
 } else {
-    var conf = require('./config/gulp_config');
+    var conf = require('./config/gulp_config').gulp;
 }
 //npm install express compression express-http-proxy
 //unzip zjf.zip -d zjf
@@ -42,7 +42,8 @@ if (allowProxy) apilist.map(function (api) {
     if (api.file != null) {
         //静态文件
         return app.get(api.from, function (req, res, next) {
-            res.sendFile(path.join(__dirname, api.file))
+            // res.sendFile(path.join(, api.file))
+            res.sendFile(api.file)
         })
     } else if (api.dir != null) {
         return app.use(api.from, express.static(api.dir))
@@ -71,10 +72,10 @@ if (allowProxy) apilist.map(function (api) {
 
 
 // send all requests to index.html so browserHistory works
-app.get('*', function (req, res, next) {
-    // res.sendFile(path.join(__dirname, 'public', 'index.html'))
-    // next()
-})
+// app.get('*', function (req, res, next) {
+//     // res.sendFile(path.join(__dirname, 'public', 'index.html'))
+//     // next()
+// })
 
 var PORT = process.env.PORT || conf.proxyPort;
 app.listen(PORT, '0.0.0.0', function () {

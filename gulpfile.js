@@ -19,9 +19,9 @@ var path = require('path');
 var argv = require('yargs').argv;
 // gulp taskA -c config-file-path
 if (_.size(argv.c) > 0) {
-    var conf = require(argv.c)
+    var conf = require(argv.c).gulp
 } else {
-    var conf = require('./config/gulp_config');
+    var conf = require('./config/gulp_config').gulp;
 }
 
 //read https://www.browsersync.io/docs/gulp

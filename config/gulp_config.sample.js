@@ -1,4 +1,5 @@
 var path = require('path');
+var os = require('os');
 var webpack = require('./WingMWeb/node_modules/webpack');
 
 var PROJ_PATH = path.join(__dirname, './');
@@ -12,12 +13,11 @@ var config = {
     devTasks: ['browser-sync'],// browser-sync | js | sass
     browserSyncType: 'proxy',// default | proxy | docker
     browserSyncPort: 7001,
-    browserSyncProxy: "127.0.0.1:7017",
+    browserSyncProxy: "127.0.0.1:7017",// proxy 所指向的代理服务
     browserSyncBaseDir: path.join(PROJ_PATH, 'WingMWeb', 'html'),//default proj_path
-    taskReloadGlob: path.join(PROJ_PATH, 'WebContent', '**/*.html'),
+    taskReloadGlob: [path.join(PROJ_PATH, 'dist', '*.js'),],
     // for webpack
-    entry: './WingMWeb/js/comm/react-test.jsx',
-    // entry: './WingMWeb/js/comm/req.js',
+    entry: './WingMWeb/js/comm/react-test.jsx',// 相对于 PROJ_PATH 的入口文件
     // for js task
     taskJSGlob: path.join(PROJ_PATH, 'src-js/**/*.js'),
     taskJSCombineName: 'bundle.js', //合并的文件，空则不合并  xxx.js | '' | null
@@ -37,6 +37,7 @@ var config = {
      * */
     proxyList: [
         {from: '/dist', dir: path.join(PROJ_PATH, 'dist')},
+        {from: '/dist/libs', dir: path.join(PROJ_PATH, 'libs')},
         {from: '*', file: path.join(MOD_PATH, 'html', 'react-test.html')},
     ],
     proxyTargetHost: '127.0.0.1:7010',
@@ -92,11 +93,15 @@ var webpackConf = {
         // extensions that are used
     },
     // devtool: 'eval-source-map',
+    devtool: 'inline-source-map',
     // devtool: 'cheap-eval-source-map',
-    devtool: 'eval',
+    // devtool: 'eval',
     externals: {
         react: 'React',
         'react-dom': 'ReactDOM',
+    },
+    watchOptions: {
+        poll: true
     },
     plugins: [
         // Define free variables
@@ -109,6 +114,16 @@ var webpackConf = {
     ],
 }
 
+
+var platform = os.platform();
+console.log('platform:', platform);
+switch (platform) {
+    case 'darwin':
+        // var fsevents = require('fsevents');
+        // console.log('run `npm install fsevents` in project directory')
+        break;
+
+}
 module.exports = {
     gulp: config,
     default: webpackConf,

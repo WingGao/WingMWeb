@@ -10,5 +10,6 @@
 
 #### webpack
 * 查看错误 `--display-error-details`
-* `./node_modules/.bin/webpack --config ../gulp_config.wing.js`
+* `./node_modules/.bin/webpack --config ../gulp_config.wing.js --watch`
+* 复制`mweb.sh`到项目，更改内容
 

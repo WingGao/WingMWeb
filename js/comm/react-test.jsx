@@ -7,10 +7,14 @@ export default class Hello extends React.Component {
             console.log('from Hello.render')
         })()
     }
+    componentDidMount(){
+        this.es6()
+    }
 
     render() {
-        // return (<h1>Hello world</h1>);
-        return React.createElement('div', null, 'hello')
+        // debugger
+        return (<h1>Hello world</h1>);
+        // return React.createElement('div', null, 'hello3')
     }
 }
 

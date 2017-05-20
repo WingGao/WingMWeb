@@ -13,7 +13,7 @@ export default class Hello extends React.Component {
 
     render() {
         // debugger
-        return (<h1>Hello world</h1>);
+        return (<h1>Hello world 2</h1>);
         // return React.createElement('div', null, 'hello3')
     }
 }

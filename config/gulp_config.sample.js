@@ -38,6 +38,7 @@ var config = {
     proxyList: [
         {from: '/dist', dir: path.join(PROJ_PATH, 'dist')},
         {from: '/dist/libs', dir: path.join(PROJ_PATH, 'libs')},
+        {from: '/bower_components', dir: path.join(MOD_PATH, 'bower_components')},
         {from: '*', file: path.join(MOD_PATH, 'html', 'react-test.html')},
     ],
     proxyTargetHost: '127.0.0.1:7010',

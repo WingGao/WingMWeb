@@ -8,3 +8,6 @@
     <link rel="icon" href="//www.360.cn/favicon.ico" />
 </head>
 ```
+
+# 常用分辨率
+微信-去标题 iPhone6 `720x1156`

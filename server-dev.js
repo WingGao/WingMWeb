@@ -72,10 +72,9 @@ if (allowProxy) apilist.map(function (api) {
 
 
 // send all requests to index.html so browserHistory works
-// app.get('*', function (req, res, next) {
-//     // res.sendFile(path.join(__dirname, 'public', 'index.html'))
-//     // next()
-// })
+app.get('*', function (req, res, next) {
+    res.status(404).send('Sorry cant find that!');
+})
 
 var PORT = process.env.PORT || conf.proxyPort;
 app.listen(PORT, '0.0.0.0', function () {

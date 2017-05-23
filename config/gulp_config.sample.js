@@ -10,24 +10,24 @@ console.log('PROJ_PATH:', PROJ_PATH);
 var config = {
     proj_path: PROJ_PATH,
     isDebug: true,
-    devTasks: ['browser-sync'],// browser-sync | js | sass
+    devTasks: ['sass', 'browser-sync'],// browser-sync | js | sass
     browserSyncType: 'proxy',// default | proxy | docker
     browserSyncPort: 7001,
     browserSyncProxy: "127.0.0.1:7017",// proxy 所指向的代理服务
     browserSyncBaseDir: path.join(PROJ_PATH, 'WingMWeb', 'html'),//default proj_path
     taskReloadGlob: [path.join(PROJ_PATH, 'dist', '*.js'),],
     // for webpack
-    entry: './WingMWeb/js/comm/react-test.jsx',// 相对于 PROJ_PATH 的入口文件
+    entry: './src/index.js',// 相对于 PROJ_PATH 的入口文件
     // for js task
     taskJSGlob: path.join(PROJ_PATH, 'src-js/**/*.js'),
     taskJSCombineName: 'bundle.js', //合并的文件，空则不合并  xxx.js | '' | null
     taskJSOutPath: path.join(PROJ_PATH, 'dist'),
     taskJSMapPath: '../tmp',// dir | '' | null,  相对路径taskJSOutPath
     // for sass task
-    taskSASSGlob: path.join(PROJ_PATH, 'src-scss/**/*.scss'),
+    taskSASSGlob: path.join(PROJ_PATH, 'src/**/*.scss'),
     taskSASSCombineName: '', //合并的文件，空则不合并  xxx.css | '' | null
-    taskSASSOutPath: path.join(PROJ_PATH, 'WebContent/resources/css'),
-    taskSASSMapPath: '../tmp',// dir | '' | null,  相对路径taskSASSOutPath
+    taskSASSOutPath: path.join(PROJ_PATH, 'dist'),
+    taskSASSMapPath: './tmp',// dir | '' | null,  相对路径taskSASSOutPath
     // for server-dev.js
     proxyPort: 7017,
     /*
@@ -39,9 +39,10 @@ var config = {
         {from: '/dist', dir: path.join(PROJ_PATH, 'dist')},
         {from: '/dist/libs', dir: path.join(PROJ_PATH, 'libs')},
         {from: '/bower_components', dir: path.join(MOD_PATH, 'bower_components')},
-        {from: '*', file: path.join(MOD_PATH, 'html', 'react-test.html')},
+        {from: '/api/*'},
+        {from: '*', file: path.join(PROJ_PATH, 'src', 'index.html')},
     ],
-    proxyTargetHost: '127.0.0.1:7010',
+    proxyTargetHost: '127.0.0.1:7000',
 };
 
 
@@ -73,7 +74,11 @@ var webpackConf = {
                     loader: path.join(MOD_PATH, "node_modules", "babel-loader"),
                     options: {
                         babelrc: false,
-                        presets: ["env", "react"]
+                        // presets: [["env", {include: 'transform-es2015-spread'}], "react"]
+                        presets: ["env", "react"],
+                        plugins: ["transform-object-rest-spread", "transform-class-properties",
+                            ["import", {libraryName: "antd", style: "css"}]
+                        ],
                     },
                 },
             },
@@ -89,7 +94,9 @@ var webpackConf = {
             path.join(MOD_PATH, "node_modules"),
         ],
         // directories where to look for modules
-
+        alias: {
+            WingMWeb: path.resolve(MOD_PATH, 'js/comm')
+        },
         extensions: [".js", ".json", ".jsx", ".css"],
         // extensions that are used
     },

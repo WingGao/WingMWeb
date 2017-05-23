@@ -29,14 +29,23 @@ function fetchJSON(url, opts) {
 }
 
 function fPostJSON(url, data, opts = {}) {
-    return fetchJSON(url, _.merge({
+    let opt = _.merge({
         method: 'POST',
         credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-        },
-        body: params(data)
-    }, opts))
+        headers: {},
+    }, opts)
+    switch (opts.dataType) {
+        case 'json':
+            opt.body = JSON.stringify(data)
+            opt.headers['Content-Type'] = 'application/json'
+            break
+        case 'form':
+        default:
+            opt.body = params(data)
+            opt.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
+            break;
+    }
+    return fetchJSON(url, opt)
 }
 
 function fGetJSON(url, data, opts = {}) {

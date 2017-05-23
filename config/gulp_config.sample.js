@@ -7,6 +7,10 @@ var MOD_PATH = path.join(__dirname, 'WingMWeb');
 
 console.log('PROJ_PATH:', PROJ_PATH);
 
+function modpack(pack) {
+    return path.join(MOD_PATH, "node_modules", pack)
+}
+
 var config = {
     proj_path: PROJ_PATH,
     isDebug: true,
@@ -71,7 +75,7 @@ var webpackConf = {
                 // enforce: "post",
                 // flags to apply these rules, even if they are overridden (advanced option)
                 use: {
-                    loader: path.join(MOD_PATH, "node_modules", "babel-loader"),
+                    loader: modpack("babel-loader"),
                     options: {
                         babelrc: false,
                         // presets: [["env", {include: 'transform-es2015-spread'}], "react"]
@@ -81,6 +85,41 @@ var webpackConf = {
                         ],
                     },
                 },
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    {
+                        // loader: modpack('isomorphic-style-loader'),
+                        loader: modpack('style-loader'),
+                    },
+                    {
+                        loader: modpack('css-loader'),
+                        options: {
+                            // CSS Loader https://github.com/webpack/css-loader
+                            importLoaders: 1,
+                            sourceMap: config.isDebug,
+                            // CSS Modules https://github.com/css-modules/css-modules
+                            // modules: true,
+                            localIdentName: config.isDebug ? '[name]-[local]-[hash:base64:5]' : '[hash:base64:5]',
+                            // CSS Nano http://cssnano.co/options/
+                            minimize: !config.isDebug,
+                            discardComments: {removeAll: true},
+                        },
+                    },
+                    {
+                        loader: modpack('postcss-loader'),
+                        options: {
+                            // parser: modpack('sugarss'),
+                            plugins: [
+                                // 'postcss-import': {},
+                                // 'cssnext': {},
+                                require('autoprefixer')(),
+                                // 'cssnano': {}
+                            ]
+                        },
+                    },
+                ],
             },
         ]
     },

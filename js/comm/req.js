@@ -31,10 +31,21 @@ function fetchJSON(url, opts) {
 function fPostJSON(url, data, opts = {}) {
     return fetchJSON(url, _.merge({
         method: 'POST',
+        credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
         },
         body: params(data)
+    }, opts))
+}
+
+function fGetJSON(url, data, opts = {}) {
+    if (!_.isNil(data)) {
+        url += '?' + _.isString(data) ? data : params(data)
+    }
+    return fetchJSON(url, _.merge({
+        method: 'GET',
+        credentials: 'same-origin',
     }, opts))
 }
 
@@ -47,7 +58,7 @@ function params(obj) {
 }
 
 export {
-    regJqPostJSON, params, fetchJSON, fPostJSON,
+    regJqPostJSON, params, fetchJSON, fPostJSON, fGetJSON,
 }
 
 

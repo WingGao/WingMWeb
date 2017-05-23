@@ -38,9 +38,11 @@
   },
   "license": "ISC",
   "dependencies": {
+    "md5": "^2.2.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-router-dom": "^4.1.1",
-    "semantic-ui-react": "^0.68.3"
+    "semantic-ui-react": "^0.68.3",
+    "whatwg-fetch": "^2.0.3"
   }
 }

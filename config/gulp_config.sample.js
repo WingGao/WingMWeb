@@ -40,11 +40,11 @@ var config = {
      * dir: 'XXX'  指定文件
      * */
     proxyList: [
-        {from: '/dist', dir: path.join(PROJ_PATH, 'dist')},
-        {from: '/dist/libs', dir: path.join(PROJ_PATH, 'libs')},
-        {from: '/bower_components', dir: path.join(MOD_PATH, 'bower_components')},
-        {from: '/api/*'},
-        {from: '*', file: path.join(PROJ_PATH, 'src', 'index.html')},
+        { from: '/dist', dir: path.join(PROJ_PATH, 'dist') },
+        { from: '/dist/libs', dir: path.join(PROJ_PATH, 'libs') },
+        { from: '/bower_components', dir: path.join(MOD_PATH, 'bower_components') },
+        { from: '/api/*' },
+        { from: '*', file: path.join(PROJ_PATH, 'src', 'index.html') },
     ],
     proxyTargetHost: '127.0.0.1:7000',
 };
@@ -81,7 +81,8 @@ var webpackConf = {
                         // presets: [["env", {include: 'transform-es2015-spread'}], "react"]
                         presets: ["env", "react"],
                         plugins: ["transform-object-rest-spread", "transform-class-properties",
-                            ["import", {libraryName: "antd", style: "css"}]
+                            "transform-decorators-legacy",
+                            ["import", { libraryName: "antd", style: "css" }]
                         ],
                     },
                 },
@@ -104,7 +105,7 @@ var webpackConf = {
                             localIdentName: config.isDebug ? '[name]-[local]-[hash:base64:5]' : '[hash:base64:5]',
                             // CSS Nano http://cssnano.co/options/
                             minimize: !config.isDebug,
-                            discardComments: {removeAll: true},
+                            discardComments: { removeAll: true },
                         },
                     },
                     {

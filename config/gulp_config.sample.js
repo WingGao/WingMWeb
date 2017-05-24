@@ -114,7 +114,7 @@ var webpackConf = {
                             plugins: [
                                 // 'postcss-import': {},
                                 // 'cssnext': {},
-                                require('autoprefixer')(),
+                                require(modpack('autoprefixer'))(),
                                 // 'cssnano': {}
                             ]
                         },

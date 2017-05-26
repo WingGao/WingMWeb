@@ -149,7 +149,8 @@ var webpackConf = {
         'react-dom': 'ReactDOM',
     },
     watchOptions: {
-        poll: true
+        ignored: /node_modules/,
+        poll: true,
     },
     plugins: [
         // Define free variables
@@ -168,7 +169,7 @@ console.log('platform:', platform);
 switch (platform) {
     case 'darwin':
         // var fsevents = require('fsevents');
-        // console.log('run `npm install fsevents` in project directory')
+        console.log('run `npm install fsevents` in project directory to fix high cpu usage')
         break;
 
 }

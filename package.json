@@ -53,6 +53,7 @@
     "history": "^4.6.1",
     "immutable": "^3.8.1",
     "invariant": "^2.2.2",
+    "list-to-tree": "^1.0.0",
     "md5": "^2.2.1",
     "moment": "^2.18.1",
     "prop-types": "^15.5.10",

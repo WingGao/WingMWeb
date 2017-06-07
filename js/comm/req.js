@@ -21,9 +21,14 @@ function fetchJSON(url, opts) {
         if (response.ok) {
             return response.json()
         } else {
-            let error = new Error(response.statusText)
-            error.response = response
-            throw error
+            return new Promise((resovle, reject) => {
+                let error = new Error(response.statusText)
+                response.json().then(eres => {
+                    error.response = eres
+                    reject(error)
+                    // throw error
+                })
+            })
         }
     })
 }
@@ -50,7 +55,7 @@ function fPostJSON(url, data, opts = {}) {
 
 function fGetJSON(url, data, opts = {}) {
     if (!_.isNil(data)) {
-        url += '?' + _.isString(data) ? data : params(data)
+        url += '?' + (_.isString(data) ? data : params(data))
     }
     return fetchJSON(url, _.merge({
         method: 'GET',
@@ -61,7 +66,10 @@ function fGetJSON(url, data, opts = {}) {
 function params(obj) {
     let res = []
     _.forEach(obj, (v, k) => {
-        res.push(`${k}=${encodeURIComponent(v)}`)
+        //忽略null的键值对
+        if (v != null) {
+            res.push(`${k}=${encodeURIComponent(v)}`)
+        }
     })
     return res.join('&')
 }

@@ -62,12 +62,23 @@ function fGetJSON(url, data, opts = {}) {
         credentials: 'same-origin',
     }, opts))
 }
-
-function params(obj) {
+/**
+ * 将对象转换为请求的params
+ * @param {object} obj 要转换的对象
+ * @param {array|object} fields 如果定义，则只处理该对象
+ * @example
+ * params({a:1, b:2, c:3}, {b:1})
+ * // or params({a:1, b:2, c:3}, ['b'])
+ * // return "a=1&c=3"
+ */
+function params(obj, fields) {
     let res = []
+    if (fields != null && !_.isArray(fields)) {
+        fields = _.keys(fields)
+    }
     _.forEach(obj, (v, k) => {
         //忽略null的键值对
-        if (v != null) {
+        if (v != null && (fields == null || fields.indexOf(k) > -1)) {
             res.push(`${k}=${encodeURIComponent(v)}`)
         }
     })

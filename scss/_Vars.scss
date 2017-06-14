@@ -1,8 +1,17 @@
-$font-cn: SF Pro SC, SF Pro Text, SF Pro Icons, AOS Icons, PingFang SC, SegoeUI, "Microsoft YaHei", Helvetica Neue, Helvetica, Arial, sans-serif;
-
+$font-cn: "SF Pro SC",
+"SF Pro Text",
+"SF Pro Icons",
+"AOS Icons",
+"PingFang SC",
+SegoeUI,
+"Microsoft YaHei",
+"Helvetica Neue",
+Helvetica,
+Arial,
+sans-serif;
 // width <= 600px
 @mixin mobile-x {
-  @media screen and (max-width: 600px) {
-    @content;
-  }
+    @media screen and (max-width: 600px) {
+        @content;
+    }
 }

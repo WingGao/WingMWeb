@@ -8,15 +8,15 @@
  */
 export function onIptChange(that, stateKey, cb = null, getVal = null) {
     return ((event, a1) => {
-        var obj = that.state
+        var obj = that.state;
         var val = null;
         if (getVal == null) val = event.target.value;
-        else val = getVal(event, a1)
+        else val = getVal(event, a1);
         if (typeof val == "string") {
             val = val.trim();
         }
-        _.set(obj, stateKey, val)
-        that.setState(obj)
+        _.set(obj, stateKey, val);
+        that.setState(obj);
         if (cb != null) cb.call(that, val);
         // console.log('onIptChange', obj)
     })
@@ -32,7 +32,7 @@ export function onIptChange(that, stateKey, cb = null, getVal = null) {
 export function twoWayBind(that, key, cb, getVal, valueKey = 'value') {
     let obj = {
         onChange: onIptChange(that, key, cb, getVal)
-    }
-    obj[valueKey] = _.get(that.state, key)
+    };
+    obj[valueKey] = _.get(that.state, key);
     return obj
 }

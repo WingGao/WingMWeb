@@ -41,7 +41,7 @@ var config = {
      * */
     proxyList: [
         { from: '/dist', dir: path.join(PROJ_PATH, 'dist') },
-        { from: '/dist/libs', dir: path.join(PROJ_PATH, 'libs') },
+        { from: '/libs', dir: path.join(PROJ_PATH, 'libs') },
         { from: '/bower_components', dir: path.join(MOD_PATH, 'bower_components') },
         { from: '/api/*' },
         { from: '*', file: path.join(PROJ_PATH, 'src', 'index.html') },
@@ -140,7 +140,7 @@ var webpackConf = {
         extensions: [".js", ".json", ".jsx", ".css"],
         // extensions that are used
     },
-    // devtool: 'eval-source-map',
+    // devtool: 'source-map',
     devtool: 'inline-source-map',
     // devtool: 'cheap-eval-source-map',
     // devtool: 'eval',
@@ -161,7 +161,7 @@ var webpackConf = {
             __DEV__: config.isDebug,
         }),
     ],
-}
+};
 
 
 var platform = os.platform();
@@ -169,7 +169,7 @@ console.log('platform:', platform);
 switch (platform) {
     case 'darwin':
         // var fsevents = require('fsevents');
-        console.log('run `npm install fsevents` in project directory to fix high cpu usage')
+        console.log('run `npm install fsevents` in project directory to fix high cpu usage');
         break;
 
 }

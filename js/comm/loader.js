@@ -24,12 +24,12 @@ function loadOne(url) {
             script.onload = function () {
                 resolve(sid)
             };
-            script.onerror = () => reject(sid)
+            script.onerror = () => reject(sid);
 
             document.head.appendChild(script);
             // _loadedIds.push(sid);
         }
-    })
+    });
     return promise;
 }
 /**

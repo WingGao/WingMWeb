@@ -166,7 +166,7 @@ function sassCombine(ugly) {
             .pipe(sourcemaps.init({loadMaps: true}))
     }
 
-    g = g.pipe(autoprefixer(AUTOPREFIXER_BROWSERS))
+    g = g.pipe(autoprefixer(AUTOPREFIXER_BROWSERS));
     if (ugly) {
         g = g.pipe(minifyCSS())
     }
@@ -192,8 +192,8 @@ gulp.task('browser-sync', function () {
         case 0:
             //docker
             require('child_process').exec('docker-machine ip ' + process.env.DOCKER_MACHINE_NAME, function (error, stdout, stderr) {
-                var dockerip = stdout.trim()
-                console.log('your docker ip is', dockerip)
+                var dockerip = stdout.trim();
+                console.log('your docker ip is', dockerip);
                 browserSync.init({
                     online: true,
                     //your docker ip
@@ -244,7 +244,7 @@ gulp.task('dev-watch', conf.devTasks, function () {
                 gulp.watch(conf.taskSASSGlob, ['sass']);
                 break;
         }
-    })
+    });
 
     if (_.size(conf.taskReloadGlob) > 0) {
         console.log('taskReloadGlob:', conf.taskReloadGlob);

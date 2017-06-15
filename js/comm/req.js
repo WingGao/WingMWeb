@@ -78,7 +78,7 @@ function params(obj, fields) {
     }
     _.forEach(obj, (v, k) => {
         //忽略null的键值对
-        if (_.size(v) > 0 && (fields == null || fields.indexOf(k) > -1)) {
+        if (v != null && (fields == null || fields.indexOf(k) > -1)) {
             res.push(`${k}=${encodeURIComponent(v)}`)
         }
     })

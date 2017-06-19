@@ -22,3 +22,11 @@
 ```javascript
 localStorage.debug = 'log:*'
 ```
+
+### docker
+```sh
+cd docker
+docker build -t wing-mweb
+
+docker run -it --name [xxx] wing-mweb -p 7024:7024 7025:7025 -v `pwd`:/app
+```

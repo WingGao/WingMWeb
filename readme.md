@@ -28,5 +28,7 @@ localStorage.debug = 'log:*'
 cd docker
 docker build -t wing-mweb
 
-docker run -it --name [xxx] wing-mweb -p 7024:7024 7025:7025 -v `pwd`:/app
+docker run -it --name [xxx] -p 7024:7024 -p 7025:7025 -v `pwd`:/app wing-mweb
+gulp
+nohup node server-dev.js -c ./xx.js &
 ```

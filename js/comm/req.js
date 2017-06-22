@@ -16,20 +16,35 @@ function regJqPostJSON() {
     };
 }
 
+let localCaches = {}
+
 function fetchJSON(url, opts) {
-    return fetch(url, opts).then((response) => {
-        if (response.ok) {
-            return response.json()
-        } else {
+    //允许本地缓存
+    if (opts.localCache && opts.method == 'GET') {
+        let c = localCaches[url]
+        if (c != null) {
             return new Promise((resovle, reject) => {
+                resovle(c)
+            })
+        }
+    }
+    return fetch(url, opts).then((response) => {
+        return new Promise((resovle, reject) => {
+            if (response.ok) {
+                return response.json().then(res => {
+                    if (opts.localCache) localCaches[url] = res
+                    resovle(res)
+                })
+            } else {
                 let error = new Error(response.statusText)
                 response.json().then(eres => {
                     error.response = eres
                     reject(error)
                     // throw error
                 })
-            })
-        }
+            }
+        })
+
     })
 }
 
@@ -74,7 +89,7 @@ function fGetJSON(url, data, opts = {}) {
 function params(obj, fields) {
     let res = []
     if (fields != null && !_.isArray(fields)) {
-        fields = _.keys(fields)
+        fields = _.sortBy(_.keys(fields))
     }
     _.forEach(obj, (v, k) => {
         //忽略null的键值对

@@ -21,6 +21,7 @@
     "lodash": "^4.17.4",
     "react": "^15.5.4",
     "semantic": "semantic-ui#^2.2.10",
-    "quill": "^1.2.5"
+    "quill": "^1.2.5",
+    "swiper": "^3.4.2"
   }
 }

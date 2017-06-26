@@ -1,9 +1,10 @@
 var path = require('path');
 var os = require('os');
-var webpack = require('./WingMWeb/node_modules/webpack');
-
-var PROJ_PATH = path.join(__dirname, './');
-var MOD_PATH = path.join(__dirname, 'WingMWeb');
+var PROJ_PATH = path.join(__dirname, 'View');
+// var MOD_PATH = path.join(__dirname, 'WingMWeb');
+var MOD_PATH = '/Users/gaoyunyun/Projs/SuamoIris/sc-admin/WingMWeb';
+var PROJ2_PATH = path.join(__dirname, '../../Public', 'Admin');
+const VERSION = 1.1;
 
 console.log('PROJ_PATH:', PROJ_PATH);
 
@@ -11,29 +12,37 @@ function modpack(pack) {
     return path.join(MOD_PATH, "node_modules", pack)
 }
 
+var webpack = require(modpack('webpack'));
+
 var config = {
+    version: VERSION,
     proj_path: PROJ_PATH,
     isDebug: true,
-    devTasks: ['sass', 'browser-sync'],// browser-sync | js | sass
+    devTasks: ['sass', 'js', 'browser-sync'],// browser-sync | js | sass
     browserSyncType: 'proxy',// default | proxy | docker
-    browserSyncPort: 7001,
-    browserSyncProxy: "127.0.0.1:7017",// proxy 所指向的代理服务
-    browserSyncBaseDir: path.join(PROJ_PATH, 'WingMWeb', 'html'),//default proj_path
+    browserSyncPort: 7024,
+    browserSyncProxy: "127.0.0.1:7025",// proxy 所指向的代理服务 ==> proxyPort
+    browserSyncBaseDir: path.join(PROJ_PATH, 'View'),//default proj_path
     taskReloadGlob: [path.join(PROJ_PATH, 'dist', '*.js'),],
     // for webpack
     entry: './src/index.js',// 相对于 PROJ_PATH 的入口文件
     // for js task
-    taskJSGlob: path.join(PROJ_PATH, 'src-js/**/*.js'),
-    taskJSCombineName: 'bundle.js', //合并的文件，空则不合并  xxx.js | '' | null
-    taskJSOutPath: path.join(PROJ_PATH, 'dist'),
-    taskJSMapPath: '../tmp',// dir | '' | null,  相对路径taskJSOutPath
+    taskJS: [
+        {
+            taskJSGlob: path.join(PROJ2_PATH, 'src-js/**/*.js'),
+            taskJSCombineName: '', //合并的文件，空则不合并  xxx.js | '' | null
+            taskJSOutPath: path.join(PROJ2_PATH, 'js'),
+            taskJSSourceRoot: '/src-js', //sourcemap相关
+            taskJSMapPath: '',// dir | '' | null,  相对路径taskJSOutPath
+        }
+    ],
     // for sass task
     taskSASSGlob: path.join(PROJ_PATH, 'src/**/*.scss'),
     taskSASSCombineName: '', //合并的文件，空则不合并  xxx.css | '' | null
     taskSASSOutPath: path.join(PROJ_PATH, 'dist'),
     taskSASSMapPath: './tmp',// dir | '' | null,  相对路径taskSASSOutPath
     // for server-dev.js
-    proxyPort: 7017,
+    proxyPort: 7025,
     /*
      * {from: '/api/captcha*', to: '/captcha', host: '120.92.16.213'},
      * file: 'dist/index.html'   指定文件,
@@ -43,7 +52,9 @@ var config = {
         { from: '/dist', dir: path.join(PROJ_PATH, 'dist') },
         { from: '/libs', dir: path.join(PROJ_PATH, 'libs') },
         { from: '/bower_components', dir: path.join(MOD_PATH, 'bower_components') },
-        { from: '/api/*' },
+        { from: '/api/*', to: '/', host: 'prl-dev.shared:7023' },
+        { from: '/Uploads', host: 'prl-dev.shared:7023' },
+        { from: '/Public/Mall', dir: path.join(PROJ_PATH, '../Public') },
         { from: '*', file: path.join(PROJ_PATH, 'src', 'index.html') },
     ],
     proxyTargetHost: '127.0.0.1:7000',
@@ -55,8 +66,8 @@ var webpackConf = {
     target: 'web',
     entry: config.entry,
     output: {
-        filename: config.taskJSCombineName,
-        path: config.taskJSOutPath
+        filename: 'bundle.js',
+        path: path.join(PROJ_PATH, '../dist')
     },
     module: {
         rules: [

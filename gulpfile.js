@@ -23,7 +23,13 @@ if (_.size(argv.c) > 0) {
 } else {
     var conf = require('./config/gulp_config').gulp;
 }
+const VERSION = 1.1;
 
+if (VERSION > _.defaultTo(conf.version, 0)) {
+    throw '请升级配置文件';
+}
+
+console.log('WingMWeb version', VERSION);
 //read https://www.browsersync.io/docs/gulp
 
 var AUTOPREFIXER_BROWSERS = [
@@ -99,12 +105,54 @@ gulp.task('version', function () {
 });
 
 
-gulp.task('js', function () {
-    console.log('taskJSGlob:', conf.taskJSGlob);
-    console.log('taskJSOut:', conf.taskJSOutPath);
-    return jsCombine(false);
+gulp.task('js', function (done) {
+    var doneTask = 0;
+    conf.taskJS.forEach(function (task, i) {
+        jsCombineSingle(task, false, function () {
+            doneTask++;
+        })
+    })
+
+    let inter = setInterval(function () {
+        if (doneTask >= conf.taskJS.length) {
+            clearInterval(inter);
+            done();
+        }
+    }, 100)
 });
 
+//单js任务
+function jsCombineSingle(jsconf, ugly, done) {
+    var needMap = _.size(jsconf.taskJSMapPath) > 0;
+    var g = gulp.src(jsconf.taskJSGlob);
+    // .pipe(order([
+    //     JS_PATH + '/03_*',
+    //     JS_PATH + '/utils.js',
+    //     JS_PATH + '/*.js',
+    // ]))
+    if (needMap) {
+        g = g.pipe(sourcemaps.init())
+    }
+    g = g.pipe(babel({
+        presets: ['babel-preset-es2015'].map(require.resolve)
+    }).on('error', function (e) {
+        console.log('>>> ERROR', e);
+        this.emit('end');
+    }));
+
+    if (_.size(jsconf.taskJSCombineName) > 0) g = g.pipe(concat(jsconf.taskJSCombineName));
+
+    if (ugly) {
+        g = g.pipe(uglify())
+    }
+    if (needMap) g = g.pipe(sourcemaps.write(jsconf.taskJSMapPath, { sourceRoot: jsconf.taskJSSourceRoot }));
+
+    g = g.pipe(gulp.dest(jsconf.taskJSOutPath))
+        .on('end', function () {
+            if (done != null) done()
+        });
+    return g;
+}
 
 function jsCombine(ugly, done) {
     var needMap = _.size(conf.taskJSMapPath) > 0;
@@ -129,7 +177,7 @@ function jsCombine(ugly, done) {
     if (ugly) {
         g = g.pipe(uglify())
     }
-    if (needMap) g = g.pipe(sourcemaps.write(conf.taskJSMapPath, {sourceRoot: '/src-js'}));
+    if (needMap) g = g.pipe(sourcemaps.write(conf.taskJSMapPath, { sourceRoot: '/src-js' }));
 
     g = g.pipe(gulp.dest(conf.taskJSOutPath))
         .on('end', function () {
@@ -137,10 +185,6 @@ function jsCombine(ugly, done) {
         });
     return g;
 }
-
-gulp.task('js-comb-test', [], function (done) {
-    return jsCombine(false, done);
-});
 
 gulp.task('js-comb', [], function () {
     jsCombine(true);
@@ -162,8 +206,8 @@ function sassCombine(ugly) {
     }
     g = g.pipe(sass().on('error', sass.logError));
     if (needMap) {
-        g = g.pipe(sourcemaps.write({includeContent: false}))
-            .pipe(sourcemaps.init({loadMaps: true}))
+        g = g.pipe(sourcemaps.write({ includeContent: false }))
+            .pipe(sourcemaps.init({ loadMaps: true }))
     }
 
     g = g.pipe(autoprefixer(AUTOPREFIXER_BROWSERS));
@@ -224,7 +268,7 @@ gulp.task('browser-sync', function () {
 
 });
 
-gulp.task('js-watch', ['js-comb-test'], function (done) {
+gulp.task('js-watch', ['js'], function (done) {
     browserSync.reload();
     done();
 });
@@ -238,7 +282,9 @@ gulp.task('dev-watch', conf.devTasks, function () {
     conf.devTasks.forEach(function (task) {
         switch (task) {
             case 'js':
-                gulp.watch(conf.taskJSGlob, ['js-watch']);
+                conf.taskJS.forEach(function (task) {
+                    gulp.watch(task.taskJSGlob, ['js-watch']);
+                })
                 break;
             case 'sass':
                 gulp.watch(conf.taskSASSGlob, ['sass']);

@@ -1,11 +1,16 @@
 var path = require('path');
 var os = require('os');
-var PROJ_PATH = path.join(__dirname, 'View');
-// var MOD_PATH = path.join(__dirname, 'WingMWeb');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+var PROJ_PATH = path.join(__dirname, 'hk');
 var MOD_PATH = '/Users/gaoyunyun/Projs/SuamoIris/sc-admin/WingMWeb';
-var PROJ2_PATH = path.join(__dirname, '../../Public', 'Admin');
+var PROJ2_PATH = path.join(__dirname, 'hk', 'sbadmin', 'reactJS');
+var DIST_PATH = path.join(PROJ_PATH, 'sbadmin', 'dist')
 const VERSION = 1.1;
 
+const MODE = process.env['WING_M_WEB']
+const IS_PROD = MODE == 'prod'
+
+console.log('mode:', MODE)
 console.log('PROJ_PATH:', PROJ_PATH);
 
 function modpack(pack) {
@@ -17,15 +22,15 @@ var webpack = require(modpack('webpack'));
 var config = {
     version: VERSION,
     proj_path: PROJ_PATH,
-    isDebug: true,
-    devTasks: ['sass', 'js', 'browser-sync'],// browser-sync | js | sass
+    isDebug: !IS_PROD,
+    devTasks: ['sass', 'browser-sync'],// browser-sync | js | sass
     browserSyncType: 'proxy',// default | proxy | docker
-    browserSyncPort: 7024,
-    browserSyncProxy: "127.0.0.1:7025",// proxy 所指向的代理服务 ==> proxyPort
+    browserSyncPort: 7028,
+    browserSyncProxy: "127.0.0.1:7029",// proxy 所指向的代理服务 ==> proxyPort
     browserSyncBaseDir: path.join(PROJ_PATH, 'View'),//default proj_path
-    taskReloadGlob: [path.join(PROJ_PATH, 'dist', '*.js'),],
+    taskReloadGlob: [path.join(DIST_PATH, 'js', '*.js'),],
     // for webpack
-    entry: './src/index.js',// 相对于 PROJ_PATH 的入口文件
+    entry: './sbadmin/reactJS/index.js',// 相对于 PROJ_PATH 的入口文件
     // for js task
     taskJS: [
         {
@@ -37,27 +42,30 @@ var config = {
         }
     ],
     // for sass task
-    taskSASSGlob: path.join(PROJ_PATH, 'src/**/*.scss'),
-    taskSASSCombineName: '', //合并的文件，空则不合并  xxx.css | '' | null
-    taskSASSOutPath: path.join(PROJ_PATH, 'dist'),
+    taskSASSGlob: path.join(PROJ2_PATH, '**/*.scss'),
+    taskSASSCombineName: 'wing.css', //合并的文件，空则不合并  xxx.css | '' | null
+    taskSASSOutPath: path.join(DIST_PATH, 'css'),
     taskSASSMapPath: './tmp',// dir | '' | null,  相对路径taskSASSOutPath
     // for server-dev.js
-    proxyPort: 7025,
+    proxyPort: 7029,
     /*
      * {from: '/api/captcha*', to: '/captcha', host: '120.92.16.213'},
      * file: 'dist/index.html'   指定文件,
      * dir: 'XXX'  指定文件
      * */
     proxyList: [
-        { from: '/dist', dir: path.join(PROJ_PATH, 'dist') },
-        { from: '/libs', dir: path.join(PROJ_PATH, 'libs') },
-        { from: '/bower_components', dir: path.join(MOD_PATH, 'bower_components') },
-        { from: '/api/*', to: '/', host: 'prl-dev.shared:7023' },
-        { from: '/Uploads', host: 'prl-dev.shared:7023' },
-        { from: '/Public/Mall', dir: path.join(PROJ_PATH, '../Public') },
-        { from: '*', file: path.join(PROJ_PATH, 'src', 'index.html') },
+        // {from: '/dist', dir: path.join(PROJ_PATH, 'dist')},
+        // {from: '/libs', dir: path.join(PROJ_PATH, 'libs')},
+        // {from: '/bower_components', dir: path.join(MOD_PATH, 'bower_components')},
+        // {from: '/api/*', to: '/'},
+        // {from: '/Uploads'},
+        // {from: '/index.php'},
+        // {from: '/Public/Mall', dir: path.join(PROJ_PATH, '../Public')},
+        // {from: '/Public'},
+        // {from: '/', file: path.join(PROJ_PATH, 'src', 'index.html')},
+        { from: '*' },
     ],
-    proxyTargetHost: '127.0.0.1:7000',
+    proxyTargetHost: 'prl-dev.shared:7027',
 };
 
 
@@ -67,7 +75,7 @@ var webpackConf = {
     entry: config.entry,
     output: {
         filename: 'bundle.js',
-        path: path.join(PROJ_PATH, '../dist')
+        path: path.join(DIST_PATH, 'js'),
     },
     module: {
         rules: [
@@ -143,10 +151,12 @@ var webpackConf = {
             "node_modules",
             PROJ_PATH,
             path.join(MOD_PATH, "node_modules"),
+            path.join(PROJ_PATH, '../../Mall', 'View', 'src'),
         ],
         // directories where to look for modules
         alias: {
-            WingMWeb: path.resolve(MOD_PATH, 'js/comm')
+            WingMWeb: path.resolve(MOD_PATH, 'js/comm'),
+            reactJS: path.resolve(PROJ_PATH, 'sbadmin', 'reactJS'),
         },
         extensions: [".js", ".json", ".jsx", ".css"],
         // extensions that are used
@@ -156,8 +166,8 @@ var webpackConf = {
     // devtool: 'cheap-eval-source-map',
     // devtool: 'eval',
     externals: {
-        react: 'React',
-        'react-dom': 'ReactDOM',
+        // react: 'React',
+        // 'react-dom': 'ReactDOM',
     },
     watchOptions: {
         ignored: /node_modules/,
@@ -174,6 +184,9 @@ var webpackConf = {
     ],
 };
 
+if (IS_PROD) {
+    webpackConf.plugins.push(new UglifyJSPlugin())
+}
 
 var platform = os.platform();
 console.log('platform:', platform);

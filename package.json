@@ -41,6 +41,8 @@
     "postcss-loader": "^2.0.5",
     "style-loader": "^0.18.0",
     "sugarss": "^1.0.0",
+    "uglify-js": "^3.0.22",
+    "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^2.5.1",
     "yargs": "^8.0.1"
   },
@@ -50,6 +52,7 @@
     "babel-polyfill": "^6.23.0",
     "classnames": "^2.2.5",
     "debug": "^2.6.8",
+    "echarts": "^3.6.2",
     "history": "^4.6.1",
     "immutable": "^3.8.1",
     "invariant": "^2.2.2",

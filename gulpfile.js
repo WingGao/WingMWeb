@@ -299,4 +299,15 @@ gulp.task('dev-watch', conf.devTasks, function () {
 
 });
 
+
+function getProdTasks(tasks) {
+    return _.map(_.filter(tasks, v => v != 'browser-sync'), v => {
+        return `${v}-dist`
+    })
+}
+
+gulp.task('prod', getProdTasks(conf.devTasks), function () {
+
+});
+
 gulp.task('default', ['dev-watch']);

@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "commonjs",
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": "./",
+        "diagnostics": true,
+        "paths": {
+            "WingMWeb/*": [
+                "/Users/gaoyunyun/Projs/SuamoIris/sc-admin/WingMWeb/js/comm/*"
+            ]
+        }
+    },
+    "include": [
+        "reactJS/**/*"
+    ]
+}

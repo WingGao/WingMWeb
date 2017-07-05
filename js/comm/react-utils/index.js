@@ -16,8 +16,10 @@ export function onIptChange(that, stateKey, cb = null, getVal = null) {
             val = val.trim();
         }
         _.set(obj, stateKey, val);
-        that.setState(obj);
-        if (cb != null) cb.call(that, val);
+        that.setState(obj, () => {
+            if (cb != null) cb.call(that, val);
+        });
+
         // console.log('onIptChange', obj)
     })
 }

@@ -94,7 +94,7 @@ function params(obj, fields) {
     _.forEach(obj, (v, k) => {
         //忽略null的键值对
         if (v != null && (fields == null || fields.indexOf(k) > -1)) {
-            res.push(`${k}=${encodeURIComponent(v)}`)
+            res.push(`${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
         }
     })
     return res.join('&')

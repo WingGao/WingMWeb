@@ -54,6 +54,7 @@
     "debug": "^2.6.8",
     "echarts": "^3.6.2",
     "history": "^4.6.1",
+    "hoist-non-react-statics": "^2.0.0",
     "immutable": "^3.8.1",
     "invariant": "^2.2.2",
     "list-to-tree": "^1.0.0",

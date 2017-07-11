@@ -61,7 +61,11 @@ function fPostJSON(url, data, opts = {}) {
             break
         case 'form':
         default:
-            opt.body = params(data)
+            if (_.isString(data)) {
+                opt.body = data
+            } else {
+                opt.body = params(data)
+            }
             opt.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
             break;
     }

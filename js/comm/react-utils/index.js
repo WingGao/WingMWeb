@@ -29,6 +29,9 @@ export function onIptChange(that, stateKey, cb = null, getVal = null) {
  * 用法 {...twoWayBind(this,'x')}
  * @param that
  * @param key
+ * @param cb
+ * @param getValue 直接返回最终的返回结果，默认为 event=>event.target.value
+ * @param valueKey 某些组件并非接受value，比如<Checkbox checked={true} />这种就要传 'checked'
  * @return {{value: *, onChange}}
  */
 export function twoWayBind(that, key, cb, getVal, valueKey = 'value') {

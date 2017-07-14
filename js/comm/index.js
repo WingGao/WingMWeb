@@ -1,3 +1,5 @@
 import { callFunc } from './func'
 import { phoneReg } from './regex'
-module.exports = { callFunc, phoneReg }
+import formatter from './formatter'
+
+module.exports = { callFunc, phoneReg, formatter }

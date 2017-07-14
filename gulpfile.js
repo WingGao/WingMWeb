@@ -11,6 +11,8 @@ var gulpif = require('gulp-if');
 const babel = require('gulp-babel');
 var order = require("gulp-order");
 var addsrc = require('gulp-add-src');
+var watch = require('gulp-watch');
+var batch = require('gulp-batch');
 var os = require('os');
 var _ = require('lodash');
 var http = require('http');
@@ -283,18 +285,24 @@ gulp.task('dev-watch', conf.devTasks, function () {
         switch (task) {
             case 'js':
                 conf.taskJS.forEach(function (task) {
-                    gulp.watch(task.taskJSGlob, ['js-watch']);
-                })
+                    watch(task.taskJSGlob, batch(function (events, done) {
+                        gulp.start('js-watch', done);
+                    }));
+                });
                 break;
             case 'sass':
-                gulp.watch(conf.taskSASSGlob, ['sass']);
+                watch(conf.taskSASSGlob, batch(function (events, done) {
+                    gulp.start('sass', done);
+                }));
                 break;
         }
     });
 
     if (_.size(conf.taskReloadGlob) > 0) {
         console.log('taskReloadGlob:', conf.taskReloadGlob);
-        gulp.watch(conf.taskReloadGlob, ['browsersync-reload']);
+        watch(conf.taskReloadGlob, batch(function (events, done) {
+            gulp.start('browsersync-reload', done);
+        }));
     }
 
 });

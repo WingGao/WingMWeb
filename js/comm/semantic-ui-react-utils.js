@@ -1,3 +1,5 @@
+import { twoWayBind } from './react-utils'
+
 /**
  * 
  * @param {*} e 
@@ -11,4 +13,22 @@ export function checkboxOnChange(e, val) {
 
 export function dropdownOnChange(e, val) {
     return val.value
+}
+export function value2OnChange(e, val) {
+    return val.value
+}
+/**
+ * ST的checkbox绑定
+ * @param {*} that 
+ * @param {*} key 
+ * @param {*} ckval raido的时候，需要去判定是否被选中
+ * @param {*} cb 
+ */
+export function stTwoWayRadio(that, key, ckval, cb) {
+    let res = twoWayBind(that, key, cb, value2OnChange)
+    if (ckval != null) {
+        res['checked'] = _.get(that.state, key) == ckval
+        res['value'] = ckval
+    }
+    return res
 }

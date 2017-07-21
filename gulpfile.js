@@ -281,36 +281,35 @@ gulp.task('browsersync-reload', function () {
 
 gulp.task('dev-watch', conf.devTasks, function () {
     IS_DEV = true;
-    var next;
+    var next, mwatch;
     if (os.platform() == 'darwin') {
-        next = function (nextTask) {
-            return batch(function (events, done) {
+        mwatch = function (g, nextTask) {
+            return watch(g, batch(function (events, done) {
                 gulp.start(nextTask, done);
-            })
+            }))
         };
     } else {
         //TODO linux 上不能watch？
-        watch = gulp.watch;
-        next = function (nextTask) {
-            return [nextTask]
-        }
+        mwatch = function (g, nextTask) {
+            return gulp.watch(g, [nextTask])
+        };
     }
     conf.devTasks.forEach(function (task) {
         switch (task) {
             case 'js':
                 conf.taskJS.forEach(function (task) {
-                    watch(task.taskJSGlob, next('js-watch'));
+                    mwatch(task.taskJSGlob, 'js-watch');
                 });
                 break;
             case 'sass':
-                watch(conf.taskSASSGlob, next('sass'));
+                mwatch(conf.taskSASSGlob, 'sass');
                 break;
         }
     });
 
     if (_.size(conf.taskReloadGlob) > 0) {
         console.log('taskReloadGlob:', conf.taskReloadGlob);
-        watch(conf.taskReloadGlob, next('browsersync-reload'));
+        mwatch(conf.taskReloadGlob, 'browsersync-reload');
     }
 
 });

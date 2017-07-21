@@ -310,9 +310,7 @@ gulp.task('dev-watch', conf.devTasks, function () {
 
     if (_.size(conf.taskReloadGlob) > 0) {
         console.log('taskReloadGlob:', conf.taskReloadGlob);
-        watch(conf.taskReloadGlob, batch(function (events, done) {
-            gulp.start('browsersync-reload', done);
-        }));
+        watch(conf.taskReloadGlob, next('browsersync-reload'));
     }
 
 });

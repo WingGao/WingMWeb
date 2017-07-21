@@ -281,19 +281,29 @@ gulp.task('browsersync-reload', function () {
 
 gulp.task('dev-watch', conf.devTasks, function () {
     IS_DEV = true;
+    var next;
+    if (os.platform() == 'darwin') {
+        next = function (nextTask) {
+            return batch(function (events, done) {
+                gulp.start(nextTask, done);
+            })
+        };
+    } else {
+        //TODO linux 上不能watch？
+        watch = gulp.watch;
+        next = function (nextTask) {
+            return [nextTask]
+        }
+    }
     conf.devTasks.forEach(function (task) {
         switch (task) {
             case 'js':
                 conf.taskJS.forEach(function (task) {
-                    watch(task.taskJSGlob, batch(function (events, done) {
-                        gulp.start('js-watch', done);
-                    }));
+                    watch(task.taskJSGlob, next('js-watch'));
                 });
                 break;
             case 'sass':
-                watch(conf.taskSASSGlob, batch(function (events, done) {
-                    gulp.start('sass', done);
-                }));
+                watch(conf.taskSASSGlob, next('sass'));
                 break;
         }
     });

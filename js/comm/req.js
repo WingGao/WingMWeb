@@ -1,4 +1,5 @@
 import 'whatwg-fetch'
+const queryString = require('query-string');
 
 function regJqPostJSON() {
     $.postJSON = function (url, data, callback) {
@@ -91,6 +92,7 @@ function fGetJSON(url, data, opts = {}) {
  * // return "a=1&c=3"
  */
 function params(obj, fields) {
+    return queryString.stringify(obj, true, { arrayFormat: 'index' })
     let res = []
     if (fields != null && !_.isArray(fields)) {
         fields = _.sortBy(_.keys(fields))

@@ -22,7 +22,7 @@ declare namespace WingMWeb {
     function fPostJSON(url: string, data?: object, opts?: FetchOption): Promise;
 
     //格式化
-    declare namespace formatter {
+    namespace formatter {
         //转成 10,000.01,不带￥
         function cny(y: any): string;
         //unix时间转成YYYY-MM-DD

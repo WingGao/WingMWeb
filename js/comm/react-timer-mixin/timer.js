@@ -64,6 +64,7 @@ function timer(WrappedComponent) {
 
     compRef
     componentWillUnmount() {
+      if (timers == null) return
       LOCAL_TIMER_TYPES.forEach(type => {
         const globalMethod = globalTimeoutMethodsMap[type];
         timers[type].forEach(id => globalMethod(id))
@@ -73,8 +74,8 @@ function timer(WrappedComponent) {
     }
 
     render() {
-      const props = {...timerProps, ...this.props}
-      return <WrappedComponent {...props} ref={comp => { this.compRef=comp }}/>
+      const props = { ...timerProps, ...this.props }
+      return <WrappedComponent {...props} ref={comp => { this.compRef = comp }} />
     }
   }
 }

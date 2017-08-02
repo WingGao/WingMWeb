@@ -6,6 +6,11 @@ declare namespace WingMWeb {
         key: string, cb?: Function, getVal?: Function,
         valueKey = 'value'): { value: any, onChange: Function };
 
+    interface NewStateOption {
+        after: (oldState) => void,
+    }
+    function setState(that: React.ReactInstance, newState: object, opt?: NewStateOption);
+
     //request 
     interface FetchOption {
         method?: string,

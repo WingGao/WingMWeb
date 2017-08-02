@@ -41,3 +41,16 @@ export function twoWayBind(that, key, cb, getVal, valueKey = 'value') {
     obj[valueKey] = _.get(that.state, key);
     return obj
 }
+/**
+ * 自动设定state
+ * @param {*} that 
+ * @param {*} newState 
+ */
+export function setState(that, newState, opt) {
+    let oldState = _.cloneDeep(that.state)
+    if (that.state == null) {
+        that.state = newState
+    } else {
+        that.setState(newState, opt.after.bind(that, oldState))
+    }
+}

@@ -11,6 +11,18 @@ declare namespace WingMWeb {
     }
     function setState(that: React.ReactInstance, newState: object, opt?: NewStateOption);
 
+
+    //semantic
+
+    function stTwoWayRadio(that: React.ReactInstance, key: string, ckval: any, cb?: Function): { checked: boolean, value: any }
+    /**
+     * 自动绑定menu
+     * @param that 
+     * @param key 所要绑定的state中的变量
+     * @param name menu的name
+     */
+    function stTwoWayMenu(that: React.ReactInstance, key: string, name: any, cb?: Function): { onClick: Function, active: boolean, name: string }
+
     //request 
     interface FetchOption {
         method?: string,

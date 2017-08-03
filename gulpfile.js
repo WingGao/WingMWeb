@@ -283,6 +283,7 @@ gulp.task('dev-watch', conf.devTasks, function () {
     IS_DEV = true;
     var next, mwatch;
     if (os.platform() == 'darwin') {
+        //TODO 内存回收
         mwatch = function (g, nextTask) {
             return watch(g, batch(function (events, done) {
                 gulp.start(nextTask, done);

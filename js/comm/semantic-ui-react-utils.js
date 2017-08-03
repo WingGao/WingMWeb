@@ -32,3 +32,14 @@ export function stTwoWayRadio(that, key, ckval, cb) {
     }
     return res
 }
+
+export function stTwoWayMenu(that, key, name, cb) {
+    let res = twoWayBind(that, key, cb, (e, val) => val.name)
+    if (name != null) {
+        res['onClick'] = res['onChange']
+        delete res['onChange']
+        res['active'] = _.get(that.state, key) == name
+        res['name'] = name
+    }
+    return res
+}

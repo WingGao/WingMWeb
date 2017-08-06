@@ -2,7 +2,7 @@
   "name": "wing-m-web",
   "version": "1.0.0",
   "description": "基础web集成开发脚手架",
-  "main": "index.js",
+  "main": "js/comm/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

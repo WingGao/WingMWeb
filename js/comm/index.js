@@ -1,13 +1,7 @@
-import { callFunc } from './func'
-import { phoneReg } from './regex'
-import formatter from './formatter'
-import * as reactUtil from './react-utils'
-import * as sematicUtil from './semantic-ui-react-utils'
-import * as req from './req'
+export { callFunc } from './func'
+export { phoneReg } from './regex'
+export formatter from './formatter'
+export * from './react-utils'
+export * from './semantic-ui-react-utils'
+export * from './req'
 
-module.exports = {
-    callFunc, phoneReg, formatter,
-    ...reactUtil,
-    ...sematicUtil,
-    ...req,
-}

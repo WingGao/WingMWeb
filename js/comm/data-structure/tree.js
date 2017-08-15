@@ -56,20 +56,26 @@ LTT = (function () {
 
     LTT.prototype.key_child = 'child';
 
+    LTT.prototype.key_sort = null;
+
     LTT.prototype.options = {};
 
     function LTT(list, options) {
         this.list = list;
         this.options = options != null ? options : {};
         this.ParseOptions();
-        this.list = sortBy(this.list, this.key_parent, this.key_id);
+        if (this.key_sort == null) {
+            this.list = sortBy(this.list, this.key_parent, this.key_id);
+        } else {
+            this.list = sortBy(this.list, this.key_sort, this.key_id)
+        }
         this.groupParent = unique(pluck(this.list, this.key_parent));
         return this;
     }
 
     LTT.prototype.ParseOptions = function () {
         var that = this;
-        ['key_id', 'key_parent', 'key_child'].forEach(function (item) {
+        ['key_id', 'key_parent', 'key_child', 'key_sort'].forEach(function (item) {
             if (typeof that.options[item] !== 'undefined') {
                 that[item] = that.options[item];
             }
@@ -125,4 +131,4 @@ LTT = (function () {
 
 })();
 
-module.exports = LTT;
+export default LTT;

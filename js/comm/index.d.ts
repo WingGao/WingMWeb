@@ -7,8 +7,8 @@ declare namespace WingMWeb {
     type bOnChange = (event: React.SyntheticEvent<any>, data: any) => void
 
     function twoWayBind(that: React.ReactInstance,
-                        key: string, cb?: Function, getVal?: Function,
-                        valueKey?: 'value' | string): { value: any, onChange: bOnChange };
+        key: string, cb?: Function, getVal?: Function,
+        valueKey?: 'value' | string): { value: any, onChange: bOnChange };
 
     interface NewStateOption {
         after: (oldState: any) => void,
@@ -55,5 +55,16 @@ declare namespace WingMWeb {
 
         //unix时间转成YYYY-MM-DD
         function unixToDate(unix: string | number): string;
+    }
+
+    // 将list转换为tree
+    interface LTTOption {
+        key_id?: string | 'id',
+        key_parent?: string | 'parent',
+        key_child?: string | 'child',
+        key_sort?: string | null,
+    }
+    class LTT {
+        constructor(list: Array<any>, options: LTTOption);
     }
 }

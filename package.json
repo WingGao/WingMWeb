@@ -63,7 +63,7 @@
   "dependencies": {
     "@types/lodash": "^4.14.71",
     "@types/react": "^15.0.39",
-    "antd": "^2.10.2",
+    "antd": "^2.12.5",
     "babel-polyfill": "^6.23.0",
     "classnames": "^2.2.5",
     "debug": "^2.6.8",
@@ -95,6 +95,7 @@
     "reselect": "^3.0.1",
     "semantic-ui-react": "^0.68.3",
     "urijs": "^1.18.10",
+    "uuid": "^3.1.0",
     "warning": "^3.0.0",
     "whatwg-fetch": "^2.0.3"
   }

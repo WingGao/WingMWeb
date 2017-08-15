@@ -82,6 +82,7 @@ function fGetJSON(url, data, opts = {}) {
         credentials: 'same-origin',
     }, opts))
 }
+
 /**
  * 将对象转换为请求的params
  * @param {object} obj 要转换的对象
@@ -104,6 +105,13 @@ function params(obj, fields) {
         }
     })
     return res.join('&')
+}
+
+
+export function parsePhpJSONValue(v) {
+    if (v === 'true') return true
+    else if (v === 'false') return false
+    return v
 }
 
 export {

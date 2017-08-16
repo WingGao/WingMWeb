@@ -12,9 +12,9 @@ export function onIptChange(that, stateKey, cb = null, getVal = null) {
         var val = null;
         if (getVal == null) val = event.target.value;
         else val = getVal(event, a1);
-        if (typeof val == "string") {
-            val = val.trim();
-        }
+        // if (typeof val == "string") {
+        //     val = val.trim();
+        // }
         _.set(obj, stateKey, val);
         that.setState(obj, () => {
             if (cb != null) cb.call(that, val);

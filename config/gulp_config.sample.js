@@ -1,10 +1,10 @@
 var path = require('path');
 var os = require('os');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-var PROJ_PATH = path.join(__dirname, 'hk');
+var PROJ_PATH = path.resolve(__dirname, '../tests');
 var MOD_PATH = '/Users/gaoyunyun/Projs/SuamoIris/sc-admin/WingMWeb';
 var PROJ2_PATH = path.join(__dirname, 'hk', 'sbadmin', 'reactJS');
-var DIST_PATH = path.join(PROJ_PATH, 'sbadmin', 'dist')
+var DIST_PATH = path.join(PROJ_PATH, 'dist')
 const VERSION = 1.1;
 
 const MODE = process.env['WING_M_WEB']
@@ -48,7 +48,7 @@ var config = {
     taskSASSMapPath: './tmp',// dir | '' | null,  相对路径taskSASSOutPath
     // for html task
     taskHtml: {
-        htmlGlob: [path.join(PROJ_PATH, '**/*.html'), "!" + path.join(PROJ_PATH, 'njk-templates/**/*.html')],
+        htmlGlob: [path.join(PROJ_PATH, 'task-html/**/*.njk'), "!" + path.join(PROJ_PATH, 'task-html/njk-templates/**/*.njk')],
         htmlDist: path.join(PROJ_PATH, 'dist'),
     },
     // for server-dev.js

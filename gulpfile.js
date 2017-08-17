@@ -55,7 +55,8 @@ var SASS_COMBINE_NAME = 'wing.css';
 gulp.task('html', function () {
     var taskHtml = conf.taskHtml
     gulp.src(taskHtml.htmlGlob)
-        .pipe(nunjucks.compile())
+        .pipe(nunjucks.compile(undefined,taskHtml.opts))
+        // .pipe(nunjucks.compile())
         .pipe(rename(function (path) {
             path.extname = '.html'
         }))

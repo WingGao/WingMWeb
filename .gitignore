@@ -1,2 +1,3 @@
 bower_components
 config/gulp_config.js
+tests/dist

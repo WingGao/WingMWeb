@@ -23,7 +23,7 @@ var config = {
     version: VERSION,
     proj_path: PROJ_PATH,
     isDebug: !IS_PROD,
-    devTasks: ['sass', 'browser-sync'],// browser-sync | js | sass
+    devTasks: ['sass', 'browser-sync'],// browser-sync | js | sass | html
     browserSyncType: 'proxy',// default | proxy | docker
     browserSyncPort: 7028,
     browserSyncProxy: "127.0.0.1:7029",// proxy 所指向的代理服务 ==> proxyPort
@@ -46,6 +46,11 @@ var config = {
     taskSASSCombineName: 'wing.css', //合并的文件，空则不合并  xxx.css | '' | null
     taskSASSOutPath: path.join(DIST_PATH, 'css'),
     taskSASSMapPath: './tmp',// dir | '' | null,  相对路径taskSASSOutPath
+    // for html task
+    taskHtml: {
+        htmlGlob: [path.join(PROJ_PATH, '**/*.html'), "!" + path.join(PROJ_PATH, 'njk-templates/**/*.html')],
+        htmlDist: path.join(PROJ_PATH, 'dist'),
+    },
     // for server-dev.js
     proxyPort: 7029,
     /*

@@ -17,13 +17,16 @@ var os = require('os');
 var _ = require('lodash');
 var http = require('http');
 var path = require('path');
+const nunjucks = require('gulp-nunjucks');
+var through = require('through2')
+var rename = require("gulp-rename");
 
 var argv = require('yargs').argv;
 // gulp taskA -c config-file-path
 if (_.size(argv.c) > 0) {
     var conf = require(argv.c).gulp
 } else {
-    var conf = require('./config/gulp_config').gulp;
+    var conf = require('./config/gulp_config.sample').gulp;
 }
 const VERSION = 1.1;
 
@@ -50,54 +53,38 @@ var SASS_FILES = SASS_PATH + '/*.scss';
 var SASS_COMBINE_NAME = 'wing.css';
 
 gulp.task('html', function () {
-    var t = new Date().getTime();
-    // var urlp = 'http://7xowky.com1.z0.glb.clouddn.com/2016_12_21/';
-    var urlp = 'http://qn.suamo-h5.com/2016_12_21/';
-    gulp.src('index*.html')
-        .pipe(replace('weblibs/swiper.min.css', 'http://cdn.staticfile.org/Swiper/3.2.5/css/swiper.min.css'))
-        .pipe(replace('weblibs/jquery-2.1.3.min.js', 'http://libs.baidu.com/libs/jquery/2.1.1/jquery.min.js'))
-        .pipe(replace('weblibs/swiper.jquery.js', 'http://cdn.staticfile.org/Swiper/3.2.5/js/swiper.jquery.min.js'))
-        .pipe(replace('weblibs/jweixin-1.0.0.js', 'http://res.wx.qq.com/open/js/jweixin-1.0.0.js'))
-        .pipe(replace('weblibs/share.js', "http://qzonestyle.gtimg.cn/qzone/qzact/common/share/share.js"))
-        .pipe(replace('weblibs/lodash.min.js', "http://qn.suamo-h5.com/weblibs/lodash.min.js"))
-        .pipe(replace('weblibs/hammer.min.js', "http://qn.suamo-h5.com/weblibs/hammer.min.js"))
-        .pipe(replace('weblibs/weui.min.css', "http://res.wx.qq.com/open/libs/weui/1.1.0/weui.min.css"))
-        .pipe(replace('weblibs/jquery-ui-1.12.1/jquery-ui.css', ''))
-        .pipe(replace('weblibs/jquery-ui-1.12.1/jquery-ui.js', ''))
-        .pipe(replace('weblibs/GreenSock-JS-1.19.0/TweenMax.js', 'http://qn.suamo-h5.com/weblibs/1.19.0/TweenMax.min.js'))
-        .pipe(replace('weblibs/pixi.js', 'http://qn.suamo-h5.com/weblibs/4.0.3/pixi.min.js'))
-        .pipe(replace('weblibs/phaser.js', 'http://qn.suamo-h5.com/weblibs/phaser_2_6_2.min.js'))
-        .pipe(replace('weblibs/weui.js', 'http://qn.suamo-h5.com/weblibs/weui_1a.min.js'))
-        .pipe(replace('="weblibs/', '="../weblibs/'))
-        .pipe(replace('dist/main.js', urlp + 'p.min.js?v=' + t))
-        .pipe(replace('dist/wx.js', ''))
-        .pipe(replace('dist/weui.js', ''))
-        .pipe(replace('dist/proj.js', ''))
-        .pipe(replace('dist/tl.js', ''))
-        .pipe(replace('dist/s3.js', ''))
-        .pipe(replace('dist/imagesloaded.pkgd.min.js', ''))
-        .pipe(replace('dist/html2canvas.js', ''))
-        .pipe(replace('dist/main.css', urlp + 'main.css?v=' + t))
-        .pipe(replace('var isDist = false', 'var isDist = true'))
-        .pipe(replace('var resourcePath = "img/"', 'var resourcePath = "' + urlp + '"'))
-        .pipe(replace(/(src|href|poster)="(img|dist)\/([^"]+)/g, '$1="' + urlp + 'img/$3'))
-        .pipe(gulp.dest('dist'))
+    var taskHtml = conf.taskHtml
+    gulp.src(taskHtml.htmlGlob)
+        .pipe(nunjucks.compile())
+        .pipe(rename(function (path) {
+            path.extname = '.html'
+        }))
+        // .pipe(through.obj(function (chunk, enc, cb) {
+        //     console.log('chunk', chunk.path) // this should log now
+        //     cb(null, chunk)
+        // }))
+        .pipe(gulp.dest(taskHtml.htmlDist))
+});
+
+gulp.task('html-watch', ['html'], function (done) {
+    browserSync.reload();
+    done();
 });
 gulp.task('html-test', function () {
-    var urlp = 'dist/';
-    gulp.src('index*.html')
-        .pipe(replace('weblibs/jquery-ui-1.12.1/jquery-ui.css', ''))
-        .pipe(replace('weblibs/jquery-ui-1.12.1/jquery-ui.js', ''))
-        .pipe(replace('="weblibs/', '="../weblibs/'))
-        .pipe(replace('dist/main.js', 'dist/p.min.js'))
-        .pipe(replace('dist/wx.js', ''))
-        .pipe(replace('dist/weui.js', ''))
-        .pipe(replace('dist/proj.js', ''))
-        .pipe(replace('dist/tl.js', ''))
-        .pipe(replace('dist/s3.js', ''))
-        .pipe(replace('dist/imagesloaded.pkgd.min.js', ''))
-        .pipe(replace('dist/html2canvas.js', ''))
-        .pipe(gulp.dest('dist'))
+    // var urlp = 'dist/';
+    // gulp.src('index*.html')
+    //     .pipe(replace('weblibs/jquery-ui-1.12.1/jquery-ui.css', ''))
+    //     .pipe(replace('weblibs/jquery-ui-1.12.1/jquery-ui.js', ''))
+    //     .pipe(replace('="weblibs/', '="../weblibs/'))
+    //     .pipe(replace('dist/main.js', 'dist/p.min.js'))
+    //     .pipe(replace('dist/wx.js', ''))
+    //     .pipe(replace('dist/weui.js', ''))
+    //     .pipe(replace('dist/proj.js', ''))
+    //     .pipe(replace('dist/tl.js', ''))
+    //     .pipe(replace('dist/s3.js', ''))
+    //     .pipe(replace('dist/imagesloaded.pkgd.min.js', ''))
+    //     .pipe(replace('dist/html2canvas.js', ''))
+    //     .pipe(gulp.dest('dist'))
 });
 gulp.task('version', function () {
     var t = new Date().getTime();
@@ -225,6 +212,7 @@ function sassCombine(ugly) {
         .pipe(browserSync.stream());
     return g
 }
+
 gulp.task('sass', function () {
     sassCombine(false)
 });
@@ -304,6 +292,9 @@ gulp.task('dev-watch', conf.devTasks, function () {
                 break;
             case 'sass':
                 mwatch(conf.taskSASSGlob, 'sass');
+                break;
+            case 'html':
+                mwatch(conf.taskHtml.htmlGlob, 'html-watch')
                 break;
         }
     });

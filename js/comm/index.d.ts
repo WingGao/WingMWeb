@@ -1,26 +1,25 @@
-import { CheckboxProps } from 'semantic-ui-react'
+import { CheckboxProps } from 'semantic-ui-react';
 
 export = WingMWeb;
 export as namespace WingMWeb;
 
 declare namespace WingMWeb {
-    type bOnChange = (event: React.SyntheticEvent<any>, data: any) => void
+    type bOnChange = (event: React.SyntheticEvent<any>, data: any) => void;
 
     function twoWayBind(that: React.ReactInstance,
-        key: string, cb?: Function, getVal?: Function,
-        valueKey?: 'value' | string): { value: any, onChange: bOnChange };
+                        key: string, cb?: Function, getVal?: Function,
+                        valueKey?: 'value' | string): { value: any, onChange: bOnChange };
 
     interface NewStateOption {
-        after: (oldState: any) => void,
+        after: (oldState: any) => void;
     }
 
     function setState(that: React.ReactInstance, newState: object, opt?: NewStateOption): void;
 
-
     //semantic
-    function stTwoWayCheckbox(that: React.ReactInstance, key: string, cb?: Function): { checked: boolean, onChange: (event: React.FormEvent<HTMLInputElement>, data: CheckboxProps) => void }
+    function stTwoWayCheckbox(that: React.ReactInstance, key: string, cb?: Function): { checked: boolean, onChange: (event: React.FormEvent<HTMLInputElement>, data: CheckboxProps) => void };
 
-    function stTwoWayRadio(that: React.ReactInstance, key: string, ckval: any, cb?: Function): { checked: boolean, value: any }
+    function stTwoWayRadio(that: React.ReactInstance, key: string, ckval: any, cb?: Function): { checked: boolean, value: any };
 
     /**
      * 自动绑定menu
@@ -28,19 +27,18 @@ declare namespace WingMWeb {
      * @param key 所要绑定的state中的变量
      * @param name menu的name
      */
-    function stTwoWayMenu(that: React.ReactInstance, key: string, name: any, cb?: Function): { onClick: Function, active: boolean, name: string }
+    function stTwoWayMenu(that: React.ReactInstance, key: string, name: any, cb?: Function): { onClick: Function, active: boolean, name: string };
 
     //request
     interface FetchOption {
-        method?: string,
-        dataType?: string | 'json' | 'form',
-        body?: string,
-        credentials?: string,
-        headers?: object,
+        method?: string;
+        dataType?: string | 'json' | 'form';
+        body?: string;
+        credentials?: string;
+        headers?: object;
         //是否本地缓存
-        localCache?: boolean,
+        localCache?: boolean;
     }
-
 
     function fetchJSON(url?: string, opts?: FetchOption): Promise<any>;
 
@@ -59,12 +57,14 @@ declare namespace WingMWeb {
 
     // 将list转换为tree
     interface LTTOption {
-        key_id?: string | 'id',
-        key_parent?: string | 'parent',
-        key_child?: string | 'child',
-        key_sort?: string | null,
+        key_id?: string | 'id';
+        key_parent?: string | 'parent';
+        key_child?: string | 'child';
+        key_sort?: string | null;
     }
     class LTT {
         constructor(list: Array<any>, options: LTTOption);
     }
+
+    //
 }

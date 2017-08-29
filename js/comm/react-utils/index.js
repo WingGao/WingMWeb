@@ -1,3 +1,5 @@
+import { get, set, cloneDeep } from 'lodash'
+
 /**
  * form绑定
  * @param that
@@ -15,7 +17,7 @@ export function onIptChange(that, stateKey, cb = null, getVal = null) {
         // if (typeof val == "string") {
         //     val = val.trim();
         // }
-        _.set(obj, stateKey, val);
+        set(obj, stateKey, val);
         that.setState(obj, () => {
             if (cb != null) cb.call(that, val);
         });
@@ -38,16 +40,17 @@ export function twoWayBind(that, key, cb, getVal, valueKey = 'value') {
     let obj = {
         onChange: onIptChange(that, key, cb, getVal)
     };
-    obj[valueKey] = _.get(that.state, key);
+    obj[valueKey] = get(that.state, key);
     return obj
 }
+
 /**
  * 自动设定state
- * @param {*} that 
- * @param {*} newState 
+ * @param {*} that
+ * @param {*} newState
  */
 export function setState(that, newState, opt) {
-    let oldState = _.cloneDeep(that.state)
+    let oldState = cloneDeep(that.state)
     if (that.state == null) {
         that.state = newState
     } else {

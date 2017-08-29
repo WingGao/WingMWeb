@@ -1,5 +1,6 @@
 import 'whatwg-fetch'
 import qs from 'qs'
+import { merge, isString, isNil, isArray } from 'lodash'
 
 function regJqPostJSON() {
     $.postJSON = function (url, data, callback) {
@@ -50,7 +51,7 @@ function fetchJSON(url, opts) {
 }
 
 function fPostJSON(url, data, opts = {}) {
-    let opt = _.merge({
+    let opt = merge({
         method: 'POST',
         credentials: 'same-origin',
         headers: {},
@@ -62,7 +63,7 @@ function fPostJSON(url, data, opts = {}) {
             break
         case 'form':
         default:
-            if (_.isString(data)) {
+            if (isString(data)) {
                 opt.body = data
             } else {
                 opt.body = params(data)
@@ -74,10 +75,10 @@ function fPostJSON(url, data, opts = {}) {
 }
 
 function fGetJSON(url, data, opts = {}) {
-    if (!_.isNil(data)) {
-        url += '?' + (_.isString(data) ? data : params(data))
+    if (!isNil(data)) {
+        url += '?' + (isString(data) ? data : params(data))
     }
-    return fetchJSON(url, _.merge({
+    return fetchJSON(url, merge({
         method: 'GET',
         credentials: 'same-origin',
     }, opts))
@@ -95,7 +96,7 @@ function fGetJSON(url, data, opts = {}) {
 function params(obj, fields) {
     return qs.stringify(obj)
     let res = []
-    if (fields != null && !_.isArray(fields)) {
+    if (fields != null && !isArray(fields)) {
         fields = _.sortBy(_.keys(fields))
     }
     _.forEach(obj, (v, k) => {

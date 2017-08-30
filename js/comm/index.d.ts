@@ -73,6 +73,8 @@ declare namespace WingMWeb {
 
     class LTT {
         constructor(list: Array<any>, options: LTTOption);
+
+        GetTree(): any;
     }
 
     // loader

@@ -1,6 +1,6 @@
 import 'whatwg-fetch'
 import qs from 'qs'
-import { merge, isString, isNil, isArray } from 'lodash'
+import { merge, isString, isNil, isArray, size } from 'lodash'
 
 function regJqPostJSON() {
     $.postJSON = function (url, data, callback) {
@@ -113,6 +113,15 @@ export function parsePhpJSONValue(v) {
     if (v === 'true') return true
     else if (v === 'false') return false
     return v
+}
+
+export function JSONparse(s, defaultVal) {
+    if (size(s) == 0) return defaultVal
+    try {
+        return JSON.parse(s)
+    } catch (e) {
+        return defaultVal
+    }
 }
 
 export {

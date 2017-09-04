@@ -4,7 +4,7 @@ export = WingMWeb;
 export as namespace WingMWeb;
 
 declare namespace WingMWeb {
-  type bOnChange = (event: React.SyntheticEvent<any>, data: any) => void;
+  type bOnChange = (event: React.SyntheticEvent<any>, data?: any) => void;
 
   function twoWayBind(that: React.ReactInstance,
                       key: string, cb?: Function, getVal?: Function,

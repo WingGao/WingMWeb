@@ -46,6 +46,9 @@ declare namespace WingMWeb {
     headers?: object;
     // 是否本地缓存
     localCache?: boolean;
+    // 参数模式
+    allowDots?: boolean;
+    arrayFormat?: 'dot';
   }
 
   function fetchJSON(url?: string, opts?: FetchOption): Promise<any>;
@@ -84,4 +87,7 @@ declare namespace WingMWeb {
   function simpleLoad(urls: Array<string>): Promise<any>;
 
   function removeLoad(urls: Array<string>): void;
+
+  // crypt
+  function md5_16(msg: any): string;
 }

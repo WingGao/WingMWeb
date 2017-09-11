@@ -1,6 +1,6 @@
 import 'whatwg-fetch'
 import qs from 'qs'
-import { merge, isString, isNil, isArray, size } from 'lodash'
+import { merge, isString, isNil, isArray, size, pick, toPlainObject, forEach } from 'lodash'
 
 function regJqPostJSON() {
     $.postJSON = function (url, data, callback) {
@@ -66,7 +66,7 @@ function fPostJSON(url, data, opts = {}) {
             if (isString(data)) {
                 opt.body = data
             } else {
-                opt.body = params(data)
+                opt.body = params(data, null, opts)
             }
             opt.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
             break;
@@ -93,8 +93,16 @@ function fGetJSON(url, data, opts = {}) {
  * // or params({a:1, b:2, c:3}, ['b'])
  * // return "a=1&c=3"
  */
-function params(obj, fields) {
-    return qs.stringify(obj)
+function params(obj, fields, opts) {
+    let nobj = merge({}, obj)
+    if (opts.arrayFormat === 'dot') {
+        forEach(obj, (v, i) => {
+            if (isArray(v)) {
+                nobj[i] = toPlainObject(v)
+            }
+        })
+    }
+    return qs.stringify(nobj, pick(opts, ['allowDots']))
     let res = []
     if (fields != null && !isArray(fields)) {
         fields = _.sortBy(_.keys(fields))

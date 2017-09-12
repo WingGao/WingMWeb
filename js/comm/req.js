@@ -88,12 +88,13 @@ function fGetJSON(url, data, opts = {}) {
  * 将对象转换为请求的params
  * @param {object} obj 要转换的对象
  * @param {array|object} fields 如果定义，则只处理该对象
+ * @param opts
  * @example
  * params({a:1, b:2, c:3}, {b:1})
  * // or params({a:1, b:2, c:3}, ['b'])
  * // return "a=1&c=3"
  */
-function params(obj, fields, opts) {
+function params(obj, fields, opts = {}) {
     let nobj = merge({}, obj)
     if (opts.arrayFormat === 'dot') {
         forEach(obj, (v, i) => {

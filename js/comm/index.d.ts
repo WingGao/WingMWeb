@@ -8,7 +8,7 @@ declare namespace WingMWeb {
 
   function twoWayBind(that: React.ReactInstance,
                       key: string, cb?: Function, getVal?: Function,
-                      valueKey?: 'value' | string): { value: any, onChange: bOnChange };
+                      valueKey?: 'value' | string): { value: any, onChange: any };
 
   interface NewStateOption {
     after: (oldState: any) => void;

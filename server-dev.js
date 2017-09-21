@@ -5,7 +5,7 @@ var proxy = require('express-http-proxy');
 var argv = require('yargs').argv;
 var nodeUrl = require('url');
 if (argv.c != null) {
-  var conf = require(path.resolve(process.env.PWD, argv.c)).gulp
+  var conf = require(path.resolve(process.cwd(), argv.c)).gulp
 } else {
   var conf = require('./config/gulp_config').gulp;
 }

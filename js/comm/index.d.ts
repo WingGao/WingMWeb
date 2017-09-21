@@ -4,39 +4,6 @@ export = WingMWeb;
 export as namespace WingMWeb;
 
 declare namespace WingMWeb {
-  type bOnChange = (event: React.SyntheticEvent<any>, data?: any) => void;
-
-  function twoWayBind(that: React.ReactInstance,
-                      key: string, cb?: Function, getVal?: Function,
-                      valueKey?: 'value' | string): { value: any, onChange: any };
-
-  interface NewStateOption {
-    after: (oldState: any) => void;
-  }
-
-  function setState(that: React.ReactInstance, newState: object, opt?: NewStateOption): void;
-
-  // semantic
-  function stTwoWayCheckbox(that: React.ReactInstance, key: string, cb?: Function): {
-    checked: boolean,
-    onChange: (event: React.FormEvent<HTMLInputElement>, data: CheckboxProps) => void,
-  };
-
-  function stTwoWayRadio(that: React.ReactInstance, key: string, ckval: any, cb?: Function): {
-    checked: boolean,
-    value: any,
-  };
-
-  /**
-   * 自动绑定menu
-   * @param that
-   * @param key 所要绑定的state中的变量
-   * @param name menu的name
-   */
-  function stTwoWayMenu(that: React.ReactInstance, key: string, name: any, cb?: Function): {
-    onClick: Function, active: boolean, name: string,
-  };
-
   // request
   interface FetchOption {
     method?: string;

@@ -76,7 +76,7 @@ function fPostJSON(url, data, opts = {}) {
 
 function fGetJSON(url, data, opts = {}) {
     if (!isNil(data)) {
-        url += '?' + (isString(data) ? data : params(data))
+        url += '?' + (isString(data) ? data : params(data, null, opts))
     }
     return fetchJSON(url, merge({
         method: 'GET',

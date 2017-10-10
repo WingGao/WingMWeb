@@ -103,7 +103,7 @@ function params(obj, fields, opts = {}) {
             }
         })
     }
-    return qs.stringify(nobj, pick(opts, ['allowDots']))
+    return qs.stringify(nobj, pick(opts, ['allowDots', 'encode']))
     let res = []
     if (fields != null && !isArray(fields)) {
         fields = _.sortBy(_.keys(fields))

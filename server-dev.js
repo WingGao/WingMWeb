@@ -53,6 +53,7 @@ if (allowProxy) apilist.map(function (api) {
     //普通代理
     var host = api.host == null ? apiHost : api.host;
     return app.use(api.from, proxy(host, {
+      limit: '1gb',
       proxyReqPathResolver: function(req) {
         var upath = nodeUrl.parse(req.originalUrl).path;
         console.log('proxy', upath);// eslint-disable-line

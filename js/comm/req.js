@@ -43,6 +43,9 @@ function fetchJSON(url, opts) {
                     error.response = eres
                     reject(error)
                     // throw error
+                }).catch(()=>{
+                    error.response = { err_msg: response.statusText }
+                    reject(error)
                 })
             }
         })

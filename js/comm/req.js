@@ -43,6 +43,9 @@ function fetchJSON(url, opts) {
                     error.response = eres
                     reject(error)
                     // throw error
+                }).catch(()=>{
+                    error.response = { err_msg: response.statusText }
+                    reject(error)
                 })
             }
         })
@@ -76,7 +79,7 @@ function fPostJSON(url, data, opts = {}) {
 
 function fGetJSON(url, data, opts = {}) {
     if (!isNil(data)) {
-        url += '?' + (isString(data) ? data : params(data))
+        url += '?' + (isString(data) ? data : params(data, null, opts))
     }
     return fetchJSON(url, merge({
         method: 'GET',
@@ -103,7 +106,7 @@ function params(obj, fields, opts = {}) {
             }
         })
     }
-    return qs.stringify(nobj, pick(opts, ['allowDots']))
+    return qs.stringify(nobj, pick(opts, ['allowDots', 'encode']))
     let res = []
     if (fields != null && !isArray(fields)) {
         fields = _.sortBy(_.keys(fields))

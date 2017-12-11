@@ -3,10 +3,11 @@ var path = require('path')
 var compression = require('compression')
 var proxy = require('express-http-proxy');
 var argv = require('yargs').argv;
+var nodeUrl = require('url');
 if (argv.c != null) {
-    var conf = require(argv.c).gulp
+  var conf = require(path.resolve(process.cwd(), argv.c)).gulp
 } else {
-    var conf = require('./config/gulp_config').gulp;
+  var conf = require('./config/gulp_config').gulp;
 }
 //npm install express compression express-http-proxy
 //unzip zjf.zip -d zjf
@@ -38,45 +39,47 @@ var apilist = conf.proxyList;
 var apiHost = conf.proxyTargetHost;
 
 if (allowProxy) apilist.map(function (api) {
-    var from = api.from;
-    if (api.file != null) {
-        //静态文件
-        return app.get(api.from, function (req, res, next) {
-            // res.sendFile(path.join(, api.file))
-            res.sendFile(api.file)
-        })
-    } else if (api.dir != null) {
-        return app.use(api.from, express.static(api.dir))
-    }
-    else {
-        //普通代理
-        var host = api.host == null ? apiHost : api.host;
-        return app.use(api.from, proxy(host, {
-            forwardPath: function (req, res) {
-                console.log('proxy', req._parsedUrl.path)
-                var p = req._parsedUrl.path
-                var rstr = null;
-                var windex = from.indexOf('*')
-                if (windex >= 0) {
-                    rstr = from.substring(0, windex)
-                }
-                if (api.to != null) {
-                    p = p.replace(rstr, api.to)
-                }
-                console.log('proxy redirect to =>', host, p)
-                return p
-            },
-        }))
-    }
+  var from = api.from;
+  if (api.file != null) {
+    //静态文件
+    return app.get(api.from, function (req, res, next) {
+      // res.sendFile(path.join(, api.file))
+      res.sendFile(api.file)
+    })
+  } else if (api.dir != null) {
+    return app.use(api.from, express.static(api.dir))
+  }
+  else {
+    //普通代理
+    var host = api.host == null ? apiHost : api.host;
+    return app.use(api.from, proxy(host, {
+      limit: '1gb',
+      proxyReqPathResolver: function(req) {
+        var upath = nodeUrl.parse(req.originalUrl).path;
+        console.log('proxy', upath);// eslint-disable-line
+        var p = upath;// eslint-disable-line
+        var rstr = null;
+        const windex = from.indexOf('*');
+        if (windex >= 0) {
+          rstr = from.substring(0, windex);
+        }
+        if (api.to != null) {
+          p = p.replace(rstr, api.to);
+        }
+        // console.log('proxy redirect to =>', host, p);
+        return p;
+      },
+    }))
+  }
 })
 
 
 // send all requests to index.html so browserHistory works
 app.get('*', function (req, res, next) {
-    res.status(404).send('Sorry cant find that!');
+  res.status(404).send('Sorry cant find that!');
 })
 
 var PORT = process.env.PORT || conf.proxyPort;
 app.listen(PORT, '0.0.0.0', function () {
-    console.log('Production Express server running at localhost:' + PORT)
+  console.log('Production Express server running at localhost:' + PORT)
 })

@@ -1,6 +1,6 @@
 import 'whatwg-fetch'
 import qs from 'qs'
-import { merge, isString, isNil, isArray, size, pick, toPlainObject, forEach } from 'lodash'
+import { merge, isString, isNil, isArray, size, pick, toPlainObject, forEach, get } from 'lodash'
 
 function regJqPostJSON() {
     $.postJSON = function (url, data, callback) {
@@ -136,8 +136,12 @@ export function JSONparse(s, defaultVal) {
     }
 }
 
+export function getReqErrMsg(err, msg) {
+    return get(err, "response.err_msg", msg)
+}
+
 export {
-    regJqPostJSON, params, fetchJSON, fPostJSON, fGetJSON,
+    regJqPostJSON, params, fetchJSON, fPostJSON, fGetJSON
 }
 
 

@@ -24,6 +24,8 @@ declare namespace WingMWeb {
 
   function fPostJSON(url: string, data?: object, opts?: FetchOption): Promise<any>;
 
+  function getReqErrMsg(err: object, msg?: string): string;
+
   // 安全的JSON解析器
   function JSONparse(s: string, defaultVal?: any): any;
 

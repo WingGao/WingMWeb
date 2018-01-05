@@ -61,6 +61,9 @@ LTT = (function () {
     LTT.prototype.options = {};
 
     function LTT(list, options) {
+        if (list == null) {
+            list = [];
+        }
         this.list = list;
         this.options = options != null ? options : {};
         this.ParseOptions();

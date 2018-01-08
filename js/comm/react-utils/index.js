@@ -12,8 +12,14 @@ export function onIptChange(that, stateKey, cb = null, getVal = null) {
     return ((event, a1) => {
         var obj = that.state;
         var val = null;
-        if (getVal == null) val = event.target.value;
-        else val = getVal(event, a1);
+        if (getVal == null) {
+            //基础类型直接处理
+            if (['number', 'boolean', 'string'].indexOf(typeof event) >= 0){
+                val = event;
+            }else {
+                val = event.target.value;
+            }
+        } else val = getVal(event, a1);
         // if (typeof val == "string") {
         //     val = val.trim();
         // }

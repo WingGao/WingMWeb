@@ -1,4 +1,5 @@
 import { CheckboxProps } from 'semantic-ui-react';
+import { bool } from "prop-types";
 
 export = WingMWeb;
 export as namespace WingMWeb;
@@ -84,6 +85,8 @@ declare namespace WingMWeb {
 
     GetTree(): any;
   }
+
+  function isPromise(obj: any): boolean;
 
   // loader
   function simpleLoad(urls: Array<string>): Promise<any>;

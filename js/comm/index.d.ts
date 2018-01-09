@@ -17,6 +17,8 @@ declare namespace WingMWeb {
 
   function setState(that: React.ReactInstance, newState: object, opt?: NewStateOption): void;
 
+  function nl2br(text: string): React.ReactChild;
+
   // semantic
   function stTwoWayCheckbox(that: React.ReactInstance, key: string, cb?: Function): {
     checked: boolean,

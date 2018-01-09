@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { get, set, cloneDeep } from 'lodash'
 
 /**
@@ -14,9 +15,9 @@ export function onIptChange(that, stateKey, cb = null, getVal = null) {
         var val = null;
         if (getVal == null) {
             //基础类型直接处理
-            if (['number', 'boolean', 'string'].indexOf(typeof event) >= 0){
+            if (['number', 'boolean', 'string'].indexOf(typeof event) >= 0) {
                 val = event;
-            }else {
+            } else {
                 val = event.target.value;
             }
         } else val = getVal(event, a1);
@@ -62,4 +63,10 @@ export function setState(that, newState, opt) {
     } else {
         that.setState(newState, opt.after.bind(that, oldState))
     }
+}
+
+export function nl2br(text) {
+    return text.split('\n').map((item, key) => {
+        return <span key={key}>{item}<br /></span>
+    });
 }

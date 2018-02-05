@@ -97,4 +97,7 @@ declare namespace WingMWeb {
 
   // crypt
   function md5_16(msg: any): string;
+
+  // dom
+  function goBackOrReplace(defLocation: string);
 }

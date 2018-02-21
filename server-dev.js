@@ -39,6 +39,7 @@ var apilist = conf.proxyList;
 var apiHost = conf.proxyTargetHost;
 
 if (allowProxy) apilist.map(function (api) {
+    // console.log(api)
   var from = api.from;
   if (api.file != null) {
     //静态文件
@@ -48,8 +49,7 @@ if (allowProxy) apilist.map(function (api) {
     })
   } else if (api.dir != null) {
     return app.use(api.from, express.static(api.dir))
-  }
-  else {
+  } else {
     //普通代理
     var host = api.host == null ? apiHost : api.host;
     return app.use(api.from, proxy(host, {

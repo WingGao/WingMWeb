@@ -31,11 +31,11 @@ function fetchJSON(url, opts) {
         }
     }
     return fetch(url, opts).then((response) => {
-        return new Promise((resovle, reject) => {
+        return new Promise((resolve, reject) => {
             if (response.ok) {
                 return response.json().then(res => {
                     if (opts.localCache) localCaches[url] = res
-                    resovle(res)
+                    resolve(res)
                 })
             } else {
                 let error = new Error(response.statusText)

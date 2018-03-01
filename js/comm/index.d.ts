@@ -7,9 +7,9 @@ export as namespace WingMWeb;
 declare namespace WingMWeb {
     type bOnChange = (event: React.SyntheticEvent<any>, data?: any) => void;
 
-    function twoWayBind(that: React.ReactInstance,
-                        key: string, cb?: Function, getVal?: Function,
-                        valueKey?: 'value' | string): { value: any, onChange: any };
+  function twoWayBind(that: React.ReactInstance,
+                      key: string, cb?: (val: any) => void, getVal?: Function,
+                      valueKey?: 'value' | string): { value: any, onChange: any };
 
     interface NewStateOption {
         after: (oldState: any) => void;

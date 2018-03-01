@@ -80,4 +80,4 @@ function timer(WrappedComponent) {
   }
 }
 
-module.exports = timer;
+export default timer;

@@ -18,12 +18,12 @@ function regJqPostJSON() {
     };
 }
 
-let localCaches = {}
+let localCaches = {};
 
 function fetchJSON(url, opts) {
     //允许本地缓存
-    if (opts.localCache && opts.method == 'GET') {
-        let c = localCaches[url]
+    if (opts.localCache && opts.method === 'GET') {
+        let c = localCaches[url];
         if (c != null) {
             return new Promise((resovle, reject) => {
                 resovle(c)
@@ -34,17 +34,22 @@ function fetchJSON(url, opts) {
         return new Promise((resolve, reject) => {
             if (response.ok) {
                 return response.json().then(res => {
-                    if (opts.localCache) localCaches[url] = res
+                    if (opts.localCache) localCaches[url] = res;
                     resolve(res)
+                }).catch(err => {
+                    err.response = response;
+                    err.response.err_msg = err.toString();
+                    reject(err)
                 })
             } else {
-                let error = new Error(response.statusText)
+                let error = new Error(response.statusText);
+                error.response = response;
                 response.json().then(eres => {
-                    error.response = eres
+                    error.response.err_msg = eres.err_msg;
                     reject(error)
                     // throw error
-                }).catch(()=>{
-                    error.response = { err_msg: response.statusText }
+                }).catch(() => {
+                    error.response.err_msg = response.statusText;
                     reject(error)
                 })
             }
@@ -58,12 +63,12 @@ function fPostJSON(url, data, opts = {}) {
         method: 'POST',
         credentials: 'same-origin',
         headers: {},
-    }, opts)
+    }, opts);
     switch (opts.dataType) {
         case 'json':
-            opt.body = JSON.stringify(data)
-            opt.headers['Content-Type'] = 'application/json'
-            break
+            opt.body = JSON.stringify(data);
+            opt.headers['Content-Type'] = 'application/json';
+            break;
         case 'form':
         default:
             if (isString(data)) {
@@ -71,7 +76,7 @@ function fPostJSON(url, data, opts = {}) {
             } else {
                 opt.body = params(data, null, opts)
             }
-            opt.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
+            opt.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
             break;
     }
     return fetchJSON(url, opt)
@@ -98,7 +103,7 @@ function fGetJSON(url, data, opts = {}) {
  * // return "a=1&c=3"
  */
 function params(obj, fields, opts = {}) {
-    let nobj = merge({}, obj)
+    let nobj = merge({}, obj);
     if (opts.arrayFormat === 'dot') {
         forEach(obj, (v, i) => {
             if (isArray(v)) {
@@ -106,8 +111,8 @@ function params(obj, fields, opts = {}) {
             }
         })
     }
-    return qs.stringify(nobj, pick(opts, ['allowDots', 'encode']))
-    let res = []
+    return qs.stringify(nobj, pick(opts, ['allowDots', 'encode']));
+    let res = [];
     if (fields != null && !isArray(fields)) {
         fields = _.sortBy(_.keys(fields))
     }
@@ -116,19 +121,19 @@ function params(obj, fields, opts = {}) {
         if (v != null && (fields == null || fields.indexOf(k) > -1)) {
             res.push(`${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
         }
-    })
+    });
     return res.join('&')
 }
 
 
 export function parsePhpJSONValue(v) {
-    if (v === 'true') return true
-    else if (v === 'false') return false
+    if (v === 'true') return true;
+    else if (v === 'false') return false;
     return v
 }
 
 export function JSONparse(s, defaultVal) {
-    if (size(s) == 0) return defaultVal
+    if (size(s) === 0) return defaultVal;
     try {
         return JSON.parse(s)
     } catch (e) {

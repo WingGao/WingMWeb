@@ -8,6 +8,9 @@ export interface SRComponentInst extends React.Component {
   readonly srReady: () => void;
 }
 
+/**
+ * 服务端渲染组件
+ */
 export class SRComponent<P, S> extends React.Component<P, S> {
   readonly srId = uniqueId('sr_');
 
@@ -16,9 +19,15 @@ export class SRComponent<P, S> extends React.Component<P, S> {
     service.add(this as any);
   }
 
+  /**
+   * 渲染完成回调
+   * 默认延迟500ms
+   */
   protected srReady() {
     debug('srReady');
-    service.remove(this as any);
+    setTimeout(() => {
+      service.remove(this as any);
+    }, 500);
   }
 }
 
@@ -42,7 +51,7 @@ class SRService {
       if (this.waitingComponents.size === 0 && !this.finish) {
         this.finish = true;
         // 完成
-        let a = document.createElement('a');
+        let a = document.createElement('span');
         a.id = 'wing_ssr_completed';
         a.style.display = 'none';
         document.body.appendChild(a);

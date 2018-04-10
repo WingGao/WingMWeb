@@ -37,24 +37,33 @@ class SRService {
 
   // 添加需要等待的组件
   add(comp: SRComponentInst) {
+    debug('add', comp.srId, comp);
+    if (this.finish) { // 删除完成节点
+      document.getElementById('wing_ssr_completed').remove();
+    }
     this.finish = false;
     this.waitingComponents.set(comp.srId, comp);
   }
 
   remove(comp: SRComponentInst) {
+    debug('remove', comp.srId, comp);
     this.waitingComponents.delete(comp.srId);
   }
 
   start() {
     const loopDuration = 5000;
     setInterval(() => {
-      if (this.waitingComponents.size === 0 && !this.finish) {
+      let waitSize = this.waitingComponents.size;
+      if (waitSize === 0 && !this.finish) {
+        debug('finish');
         this.finish = true;
         // 完成
         let a = document.createElement('span');
         a.id = 'wing_ssr_completed';
         a.style.display = 'none';
         document.body.appendChild(a);
+      } else if (waitSize > 0) {
+        debug('waitingComponents', waitSize);
       }
     }, loopDuration);
   }

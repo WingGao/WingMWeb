@@ -34,9 +34,16 @@ export class SRComponent<P, S> extends React.Component<P, S> {
 class SRService {
   waitingComponents: Map<string, SRComponentInst> = new Map<string, SRComponentInst>();
   finish = false;
+  working = false;
 
+  checkWorking() {
+    if (!this.working) {
+      debug('SRService is not working');
+    }
+  }
   // 添加需要等待的组件
   add(comp: SRComponentInst) {
+    this.checkWorking();
     debug('add', comp.srId, comp);
     if (this.finish) { // 删除完成节点
       document.getElementById('wing_ssr_completed').remove();
@@ -46,6 +53,7 @@ class SRService {
   }
 
   remove(comp: SRComponentInst) {
+    this.checkWorking();
     debug('remove', comp.srId, comp);
     this.waitingComponents.delete(comp.srId);
   }
@@ -66,6 +74,7 @@ class SRService {
         debug('waitingComponents', waitSize);
       }
     }, loopDuration);
+    this.working = true;
   }
 }
 

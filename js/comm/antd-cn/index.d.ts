@@ -11,3 +11,4 @@ export class ModalCN {
 }
 
 export * from './data-picker';
+export * from './utils';

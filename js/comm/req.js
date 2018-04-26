@@ -142,7 +142,11 @@ export function JSONparse(s, defaultVal) {
 }
 
 export function getReqErrMsg(err, msg) {
-    return get(err, "response.err_msg", msg)
+    if (typeof err == 'object') {
+        return get(err, "response.err_msg", msg)
+    } else {
+        return msg == null ? err : msg
+    }
 }
 
 export {

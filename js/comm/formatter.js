@@ -10,7 +10,7 @@ const CN_DATETIME = 'YYYY-MM-DD HH:mm:ss'
  * @return {string} '10,000.01'
  */
 function cny(y) {
-    return numeral(y).format('0,0[.]00')
+    return numeral(y).format('0,0.00')
 }
 
 /**

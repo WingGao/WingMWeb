@@ -8,8 +8,8 @@ declare namespace WingMWeb {
   type bOnChange = (event: React.SyntheticEvent<any>, data?: any) => void;
 
   function twoWayBind(that: React.ReactInstance,
-                      key: string, cb?: (val: any) => void, getVal?: Function,
-                      valueKey?: 'value' | string): { value: any, onChange: any };
+    key: string, cb?: (val: any) => void, getVal?: Function,
+    valueKey?: 'value' | string): { value: any, onChange: any };
 
   interface NewStateOption {
     after: (oldState: any) => void;
@@ -107,4 +107,7 @@ declare namespace WingMWeb {
 
   // function
   function callFunc(func: Function, args?: Array<any>): any | boolean;
+
+  //regex
+  function isImageUrl(url: string): boolean;
 }

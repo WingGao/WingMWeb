@@ -17,6 +17,6 @@ export interface TimerProps {
 declare class TimerComponent extends React.Component {
 }
 
-declare function timer(comp: React.ComponentClass): TimerComponent;
+declare function timer<P>(comp: React.ComponentClass): P;
 
 export default timer;

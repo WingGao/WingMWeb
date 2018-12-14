@@ -7,8 +7,19 @@ function getLoadId(url) {
 function loadOne(url) {
     let promise = new Promise((resolve, reject) => {
         let sid = getLoadId(url);
-        if (document.getElementById(sid) != null) {
-            resolve(sid)
+        let dom = document.getElementById(sid)
+        if (dom != null) {
+            if (dom.className.indexOf('_loaded') >= 0) {
+                resolve(sid);
+            } else {
+                let timer = setInterval(() => {
+                    if (dom.className.indexOf('_loaded') >= 0) {
+                        clearInterval(timer);
+                        resolve(sid);
+                    }
+                }, 200);
+            }
+            return;
         } else {
             let script = null;
             if (url.indexOf('.css') > 0) {
@@ -22,9 +33,13 @@ function loadOne(url) {
                 script.id = sid;
             }
             script.onload = function () {
-                resolve(sid)
+                script.classList.add('_loaded');
+                resolve(sid);
             };
-            script.onerror = () => reject(sid);
+            script.onerror = () => {
+                script.remove();
+                reject(sid);
+            }
 
             document.head.appendChild(script);
             // _loadedIds.push(sid);
@@ -34,7 +49,7 @@ function loadOne(url) {
 }
 /**
  * 添加指定js/css
- * @param {string} urls 
+ * @param {string} urls
  * @return {Promise} (sid)=>{}
  */
 export function simpleLoad(urls) {

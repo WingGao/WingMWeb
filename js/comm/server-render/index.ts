@@ -59,6 +59,7 @@ class SRService {
   }
 
   start() {
+    if (this.working) return;
     const loopDuration = 5000;
     setInterval(() => {
       let waitSize = this.waitingComponents.size;
